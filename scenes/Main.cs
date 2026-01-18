@@ -1,46 +1,80 @@
+using Game.Manager;
 using Godot;
-using System;
 
 namespace Game;
 
-public partial class Main : Node2D
+public partial class Main : Node
 {
-  private Sprite2D sprite;
-  private PackedScene buildinScene;
+  #region Node references
+  private GridManager gridManager;
+  private Sprite2D cursorSprite;
+  private PackedScene buildingScene;
   private Button placeBuildingButton;
+  #endregion
 
+  #region Private members
+  private Vector2I? hoveredGridCell;
+  private int highlightRadius = 3;
+  #endregion
 
   public override void _Ready()
   {
-    buildinScene = GD.Load<PackedScene>("res://scenes/building/Building.tscn");
-    sprite = GetNode<Sprite2D>("Sprite2D");
+    buildingScene = GD.Load<PackedScene>("res://scenes/building/Building.tscn");
+
+    gridManager = GetNode<GridManager>("GridManager");
+    cursorSprite = GetNode<Sprite2D>("Cursor");
     placeBuildingButton = GetNode<Button>("PlaceBuildingButton");
+
+    cursorSprite.Hide();
+
+    placeBuildingButton.Pressed += OnPlaceBuildingButtonPressed;
   }
 
   public override void _UnhandledInput(InputEvent @event)
   {
-    if (@event.IsActionPressed("left_click"))
+    if (
+      @event.IsActionPressed("left_click") &&
+      hoveredGridCell.HasValue &&
+      gridManager.IsTilePositionBuildable(hoveredGridCell.Value)
+    )
     {
-      PlaceBuildingAtMousePosition();
+      PlaceBuildingAtHoveredCellPosition();
     }
   }
 
-  public void PlaceBuildingAtMousePosition()
+  public void PlaceBuildingAtHoveredCellPosition()
   {
-    var building = buildinScene.Instantiate<Node2D>();
-    building.GlobalPosition = GetMouseGridCellPosition() * 64;
+    if (!hoveredGridCell.HasValue) return;
+
+    var building = buildingScene.Instantiate<Node2D>();
+    building.GlobalPosition = hoveredGridCell.Value * 64;
 
     AddChild(building);
-  }
 
-  private Vector2 GetMouseGridCellPosition()
-  {
-    var mousePosition = GetGlobalMousePosition();
-    return (mousePosition / 64).Floor();
+    cursorSprite.Hide();
+
+    hoveredGridCell = null;
+    gridManager.ClearHighlightedTiles();
   }
 
   public override void _Process(double delta)
   {
-    sprite.GlobalPosition = GetMouseGridCellPosition() * 64;
+    if (cursorSprite.Visible)
+    {
+      var mouseGridPosition = gridManager.GetMouseGridCellPosition();
+      cursorSprite.GlobalPosition = mouseGridPosition * 64;
+
+      if (!hoveredGridCell.HasValue || hoveredGridCell.Value != mouseGridPosition)
+      {
+        hoveredGridCell = mouseGridPosition;
+        gridManager.HighlightExpandedBuildableTiles(hoveredGridCell.Value, 2);
+      }
+    }
+  }
+
+  private void OnPlaceBuildingButtonPressed()
+  {
+    cursorSprite.Show();
+    gridManager.HighlightBuildableTiles();
   }
 }

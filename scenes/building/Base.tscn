@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgu11wxwr5v31"]
+
+[ext_resource type="PackedScene" uid="uid://m5e0hg6lexx7" path="res://scenes/component/BuildingComponent.tscn" id="1_yhg6d"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_w4gcn"]
+size = Vector2(64, 64)
+
+[node name="Base" type="Node2D"]
+
+[node name="BuildingComponent" parent="." instance=ExtResource("1_yhg6d")]
+buildableRadius = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("PlaceholderTexture2D_w4gcn")
+centered = false
