@@ -196,6 +196,7 @@ texture_region_size = Vector2i(192, 192)
 0:0/animation_frame_3/duration = 0.15
 0:0/0 = 0
 0:0/0/texture_origin = Vector2i(0, 64)
+0:0/0/custom_data_1 = true
 
 [resource]
 tile_size = Vector2i(64, 64)
@@ -204,7 +205,9 @@ terrain_set_0/terrain_0/name = "sand"
 terrain_set_0/terrain_0/color = Color(0.8091111, 0.80619764, 3.85046e-07, 1)
 terrain_set_0/terrain_1/name = "grass"
 terrain_set_0/terrain_1/color = Color(0, 0.8532563, 0.1286825, 1)
-custom_data_layer_0/name = "buildable"
+custom_data_layer_0/name = "is_buildable"
 custom_data_layer_0/type = 1
+custom_data_layer_1/name = "is_wood"
+custom_data_layer_1/type = 1
 sources/0 = SubResource("TileSetAtlasSource_ojpid")
 sources/1 = SubResource("TileSetAtlasSource_gofkq")

@@ -6,4 +6,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>PuzzleCourseCS</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ExhaustiveMatching.Analyzer" Version="0.5.0" />
+  </ItemGroup>
 </Project>
