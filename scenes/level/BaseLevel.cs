@@ -4,7 +4,7 @@ using Godot;
 
 namespace Game;
 
-public partial class Main : Node
+public partial class BaseLevel : Node
 {
 
   #region Node references
