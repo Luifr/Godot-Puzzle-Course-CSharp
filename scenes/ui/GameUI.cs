@@ -5,7 +5,7 @@ using Godot;
 
 namespace Game.UI;
 
-public partial class GameUI : MarginContainer
+public partial class GameUI : CanvasLayer
 {
 
 	#region Export references
@@ -29,9 +29,9 @@ public partial class GameUI : MarginContainer
 	public override void _Ready()
 	{
 		// TEMP
-		woodLabel = GetNode<Label>("WoodLabel");
+		woodLabel = GetNode<Label>("%WoodLabel");
 
-		hBoxContainer = GetNode<HBoxContainer>("HBoxContainer");
+		hBoxContainer = GetNode<HBoxContainer>("MarginContainer/HBoxContainer");
 
 		CreateBuildingButtons();
 

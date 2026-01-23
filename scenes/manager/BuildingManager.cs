@@ -29,6 +29,7 @@ public partial class BuildingManager : Node
 	#endregion
 
 	#region Private members
+	[Export]
 	private int startingResourceCount = 4;
 	private int currentResourcesCount;
 	private int currentlyUsedResourcesCount;

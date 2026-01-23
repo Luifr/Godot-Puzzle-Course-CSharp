@@ -8,7 +8,7 @@
 script = ExtResource("1_w0kxv")
 displayName = "Tower"
 resourceCost = 4
-buildableRadius = 2
+buildableRadius = 3
 buildableScene = ExtResource("1_55ps4")
 spriteScene = ExtResource("3_q53hc")
 metadata/_custom_type_script = "uid://baatle530l6qi"

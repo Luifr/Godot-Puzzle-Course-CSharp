@@ -26,6 +26,7 @@ public partial class GridManager : Node
 	#region Constants
 	private const string IS_BUILDABLE = "is_buildable";
 	private const string IS_WOOD = "is_wood";
+	private const string IS_IGNORED = "is_ignored";
 	public const int TILE_SIZE = 64;
 	#endregion
 
@@ -50,7 +51,7 @@ public partial class GridManager : Node
 		{
 			var customData = layer.GetCellTileData(tilePosition);
 
-			if (customData == null) continue;
+			if (customData == null || (bool)customData.GetCustomData(IS_IGNORED)) continue;
 
 			return (bool)customData.GetCustomData(dataName);
 		}
@@ -120,22 +121,26 @@ public partial class GridManager : Node
 		return GetTree().GetNodesInGroup(nameof(BuildingComponent)).Cast<BuildingComponent>();
 	}
 
-	private List<TileMapLayer> GetAllTileMapLayers(TileMapLayer rootTileMapLayer)
+	private List<TileMapLayer> GetAllTileMapLayers(Node node)
 	{
 		var allTileMapLayers = new List<TileMapLayer>();
 
-		var children = rootTileMapLayer.GetChildren();
+		var children = node.GetChildren();
 		children.Reverse();
 
 		foreach (var child in children)
 		{
-			if (child is TileMapLayer childLayer)
+			if (child is Node childNode)
 			{
-				allTileMapLayers.AddRange(GetAllTileMapLayers(childLayer));
+				allTileMapLayers.AddRange(GetAllTileMapLayers(childNode));
 			}
 		}
 
-		allTileMapLayers.Add(rootTileMapLayer);
+		if (node is TileMapLayer tileMapLayer)
+		{
+			allTileMapLayers.Add(tileMapLayer);
+		}
+
 		return allTileMapLayers;
 	}
 

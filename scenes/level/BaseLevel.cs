@@ -1,3 +1,5 @@
+using Game.AutoLoad;
+using Game.Component;
 using Game.Manager;
 using Game.UI;
 using Godot;
@@ -10,6 +12,9 @@ public partial class BaseLevel : Node
   #region Node references
   private GridManager gridManager;
   private GoldMine goldMine;
+  private GameCamera gameCamera;
+  private TileMapLayer baseTerrainTileMapLayer;
+  private Node2D baseBuilding;
   #endregion
 
   // TODOT: TEMP remove
@@ -25,14 +30,18 @@ public partial class BaseLevel : Node
 
     gridManager = GetNode<GridManager>("GridManager");
     goldMine = GetNode<GoldMine>("%GoldMine");
+    gameCamera = GetNode<GameCamera>("GameCamera");
+    baseTerrainTileMapLayer = GetNode<TileMapLayer>("%BaseTerrainTileMapLayer");
+    baseBuilding = GetNode<Node2D>("%Base");
+
+    gameCamera.SetBoundingRect(baseTerrainTileMapLayer.GetUsedRect());
+    gameCamera.CenterOnPosition(baseBuilding.GlobalPosition);
 
     gridManager.GridStateUpdated += OnGridStateUpdated;
-  }
 
-  public override void _Process(double _delta)
-  {
     // TODO: remove
-    gameUI.UpdateWoodText(buildingManager.availableResourceCount);
+    GameEvents.Instance.BuildingPlaced += (_) => gameUI.UpdateWoodText(buildingManager.availableResourceCount);
+    GameEvents.Instance.BuildingDestroyed += (_, _) => gameUI.UpdateWoodText(buildingManager.availableResourceCount);
   }
 
   private void OnGridStateUpdated()
