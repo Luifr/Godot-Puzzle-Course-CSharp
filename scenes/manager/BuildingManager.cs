@@ -3,8 +3,8 @@ using Game.Resources.Building;
 using Game.UI;
 using Godot;
 using ExhaustiveMatching;
-using Game.Component;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Game.Manager;
 
@@ -33,7 +33,7 @@ public partial class BuildingManager : Node
 	private int startingResourceCount = 4;
 	private int currentResourcesCount;
 	private int currentlyUsedResourcesCount;
-	private Vector2I hoveredGridCell;
+	private Rect2I hoveredGridArea = new Rect2I(Vector2I.One, Vector2I.One);
 	private BuildingResource buildingResourceToPlace;
 	private BuildingGhost buildingGhost;
 	private State currentState = State.Normal;
@@ -72,7 +72,7 @@ public partial class BuildingManager : Node
 				}
 				else if (
 					@event.IsActionPressed(ACTION_LEFT_CLICK) &&
-					IsBuildingPlaceableAtTile(hoveredGridCell)
+					IsBuildingPlaceableAtArea(hoveredGridArea)
 				)
 				{
 					PlaceBuildingAtHoveredCellPosition();
@@ -88,9 +88,9 @@ public partial class BuildingManager : Node
 
 		var mouseGridPosition = gridManager.GetMouseGridCellPosition();
 
-		if (mouseGridPosition != hoveredGridCell)
+		if (mouseGridPosition != hoveredGridArea.Position)
 		{
-			hoveredGridCell = mouseGridPosition;
+			hoveredGridArea.Position = mouseGridPosition;
 			UpdateHoveredGridCell();
 		}
 
@@ -111,10 +111,10 @@ public partial class BuildingManager : Node
 		gridManager.ClearHighlightedTiles();
 		gridManager.HighlightBuildableTiles();
 
-		if (IsBuildingPlaceableAtTile(hoveredGridCell))
+		if (IsBuildingPlaceableAtArea(hoveredGridArea))
 		{
-			gridManager.HighlightExpandedBuildableTiles(hoveredGridCell, buildingResourceToPlace.buildableRadius);
-			gridManager.HighlightResourceTiles(hoveredGridCell, buildingResourceToPlace.resourceRadius);
+			gridManager.HighlightExpandedBuildableTiles(hoveredGridArea, buildingResourceToPlace.buildableRadius);
+			gridManager.HighlightResourceTiles(hoveredGridArea, buildingResourceToPlace.resourceRadius);
 			buildingGhost.SetValid();
 		}
 		else
@@ -126,7 +126,7 @@ public partial class BuildingManager : Node
 	private void PlaceBuildingAtHoveredCellPosition()
 	{
 		var building = buildingResourceToPlace.buildableScene.Instantiate<Node2D>();
-		building.GlobalPosition = hoveredGridCell * GridManager.TILE_SIZE;
+		building.GlobalPosition = hoveredGridArea.Position * GridManager.TILE_SIZE;
 
 		ySortRoot.AddChild(building);
 
@@ -139,15 +139,15 @@ public partial class BuildingManager : Node
 
 	private void DestroyBuildingAtHoveredCellPosition()
 	{
+		var rootCell = hoveredGridArea.Position;
 		var hoveredBuildingComponent =
 			gridManager.GetAllBuildingComponents()
-			.FirstOrDefault((buildingComponent) => buildingComponent.GetGridCellPosition() == hoveredGridCell);
+			.FirstOrDefault((buildingComponent) => buildingComponent.GetGridCellPosition() == rootCell);
 
 		if (hoveredBuildingComponent == null) return;
 
 		currentlyUsedResourcesCount -= hoveredBuildingComponent.buildingResource.resourceCost;
 		hoveredBuildingComponent.Destroy();
-
 	}
 
 	private void ClearBuildingGhost()
@@ -161,11 +161,28 @@ public partial class BuildingManager : Node
 		gridManager.ClearHighlightedTiles();
 	}
 
-	private bool IsBuildingPlaceableAtTile(Vector2I tilePosition)
+	private bool IsBuildingPlaceableAtArea(Rect2I tileArea)
 	{
+		var positions =GetTilePositionsInTileArea(tileArea);
+
 		return
-			gridManager.IsTilePositionBuildable(tilePosition) &&
+			positions.All(gridManager.IsTilePositionBuildable) &&
 			availableResourceCount >= buildingResourceToPlace.resourceCost;
+	}
+
+	private List<Vector2I> GetTilePositionsInTileArea(Rect2I tileArea)
+	{
+		var result = new List<Vector2I>();
+
+		for (int x = tileArea.Position.X; x < tileArea.End.X; x += 1)
+		{
+			for (int y = tileArea.Position.Y; y < tileArea.End.Y; y += 1)
+			{
+				result.Add(new Vector2I(x, y));
+			}
+		}
+
+		return result;
 	}
 
 	private void UpdateHoveredGridCell()
@@ -214,6 +231,7 @@ public partial class BuildingManager : Node
 	{
 		ChangeState(State.PlacingBuilding);
 
+		hoveredGridArea.Size = buildingResource.dimensions;
 		buildingGhost = buildingGhostScene.Instantiate<BuildingGhost>();
 
 		ySortRoot.AddChild(buildingGhost);

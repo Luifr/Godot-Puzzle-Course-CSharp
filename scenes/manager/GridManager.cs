@@ -72,9 +72,9 @@ public partial class GridManager : Node
 		}
 	}
 
-	public void HighlightExpandedBuildableTiles(Vector2I rootCell, int radius)
+	public void HighlightExpandedBuildableTiles(Rect2I tileArea, int radius)
 	{
-		var validTiles = GetValidTilesInRadius(rootCell, radius);
+		var validTiles = GetValidTilesInRadius(tileArea, radius);
 		var expandedTiles = validTiles.Except(validBuildableTiles).Except(GetOccupiedTiles());
 
 		var atlasCoord = new Vector2I(1, 0);
@@ -85,9 +85,9 @@ public partial class GridManager : Node
 		}
 	}
 
-	public void HighlightResourceTiles(Vector2I rootCell, int radius)
+	public void HighlightResourceTiles(Rect2I tileArea, int radius)
 	{
-		var resourceTiles = GetResourceTilesInRadius(rootCell, radius);
+		var resourceTiles = GetResourceTilesInRadius(tileArea, radius);
 
 		var atlasCoord = new Vector2I(1, 0);
 
@@ -147,7 +147,8 @@ public partial class GridManager : Node
 	private void UpdateValidBuildableTiles(BuildingComponent buildingComponent)
 	{
 		var rootCell = buildingComponent.GetGridCellPosition();
-		var validTiles = GetValidTilesInRadius(rootCell, buildingComponent.buildingResource.buildableRadius);
+		var tileArea = new Rect2I(rootCell, buildingComponent.buildingResource.dimensions);
+		var validTiles = GetValidTilesInRadius(tileArea, buildingComponent.buildingResource.buildableRadius);
 
 		validBuildableTiles.UnionWith(validTiles);
 
@@ -159,7 +160,8 @@ public partial class GridManager : Node
 		var oldResourceCount = collectedresourceTiles.Count;
 
 		var rootCell = buildingComponent.GetGridCellPosition();
-		var resourceTiles = GetResourceTilesInRadius(rootCell, buildingComponent.buildingResource.resourceRadius);
+		var tileArea = new Rect2I(rootCell, buildingComponent.buildingResource.dimensions);
+		var resourceTiles = GetResourceTilesInRadius(tileArea, buildingComponent.buildingResource.resourceRadius);
 		collectedresourceTiles.UnionWith(resourceTiles);
 
 		if (collectedresourceTiles.Count != oldResourceCount)
@@ -193,13 +195,13 @@ public partial class GridManager : Node
 		EmitSignalResourceTilesUpdated(collectedresourceTiles.Count);
 	}
 
-	private List<Vector2I> GetTilesInRadius(Vector2I rootCell, int radius, Func<Vector2I, bool> filterFn)
+	private List<Vector2I> GetTilesInRadius(Rect2I tileArea, int radius, Func<Vector2I, bool> filterFn)
 	{
 		List<Vector2I> list = new();
 
-		for (var x = rootCell.X - radius; x <= rootCell.X + radius; x++)
+		for (var x = tileArea.Position.X - radius; x < tileArea.End.X + radius; x++)
 		{
-			for (var y = rootCell.Y - radius; y <= rootCell.Y + radius; y++)
+			for (var y = tileArea.Position.Y - radius; y < tileArea.End.Y + radius; y++)
 			{
 				var tilePosition = new Vector2I((int)x, (int)y);
 				if (!filterFn(tilePosition)) continue;
@@ -210,19 +212,19 @@ public partial class GridManager : Node
 		return list;
 	}
 
-	private List<Vector2I> GetValidTilesInRadius(Vector2I rootCell, int radius)
+	private List<Vector2I> GetValidTilesInRadius(Rect2I tileArea, int radius)
 	{
 		return GetTilesInRadius(
-			rootCell,
+			tileArea,
 			radius,
 			(tilePosition) => TileHasCustomData(tilePosition, IS_BUILDABLE)
 		);
 	}
 
-	private List<Vector2I> GetResourceTilesInRadius(Vector2I rootCell, int radius)
+	private List<Vector2I> GetResourceTilesInRadius(Rect2I tileArea, int radius)
 	{
 		return GetTilesInRadius(
-			rootCell,
+			tileArea,
 			radius,
 			(tilePosition) => TileHasCustomData(tilePosition, IS_WOOD)
 		);
@@ -231,7 +233,12 @@ public partial class GridManager : Node
 	private IEnumerable<Vector2I> GetOccupiedTiles()
 	{
 		var buildingComponents = GetAllBuildingComponents();
-		var occupiedPositions = buildingComponents.Select((x) => x.GetGridCellPosition());
+		var occupiedPositions = new List<Vector2I>();
+
+		foreach (var buildingComponent in buildingComponents)
+		{
+			occupiedPositions.AddRange(buildingComponent.GetOccupiedCellPositions());
+		}
 		return occupiedPositions;
 	}
 
@@ -245,8 +252,7 @@ public partial class GridManager : Node
 
 	private void OnBuildingDestroyed(BuildingResource buildingResource, Vector2I buildingPosition)
 	{
-		if (buildingResource.buildableRadius > 0)
-			RecalculateValidTiles();
+		RecalculateValidTiles();
 		if (buildingResource.resourceRadius > 0)
 			RecalculateCollectedResourceTiles();
 	}

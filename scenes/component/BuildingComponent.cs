@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Dynamic;
 using Game.AutoLoad;
 using Game.Manager;
 using Game.Resources.Building;
@@ -31,6 +33,23 @@ public partial class BuildingComponent : Node2D
     var gridPosition = (GlobalPosition / GridManager.TILE_SIZE).Floor();
 
     return new Vector2I((int)gridPosition.X, (int)gridPosition.Y);
+  }
+
+  public List<Vector2I> GetOccupiedCellPositions()
+  {
+    var result = new List<Vector2I>();
+    var gridCellPosition = GetGridCellPosition();
+
+    for (int x = gridCellPosition.X; x < gridCellPosition.X + buildingResource.dimensions.X; x += 1)
+		{
+      for (int y = gridCellPosition.Y; y < gridCellPosition.Y + buildingResource.dimensions.Y; y += 1)
+      {
+        result.Add(new Vector2I(x, y));
+      }
+			
+		}
+
+    return result;
   }
 
   public void Destroy()
