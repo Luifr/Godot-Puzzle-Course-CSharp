@@ -12,7 +12,7 @@
         "${workspaceRoot}"
       ],
       "cwd": "${workspaceFolder}",
-      "console": "internalConsole",
+      "console": "externalTerminal",
       "stopAtEntry": false
     },
     {
@@ -27,7 +27,7 @@
         "--editor"
       ],
       "cwd": "${workspaceFolder}",
-      "console": "internalConsole",
+      "console": "externalTerminal",
       "stopAtEntry": false
     },
     {

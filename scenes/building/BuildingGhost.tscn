@@ -1,7 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://epkt8ihuqwtr"]
+[gd_scene format=3 uid="uid://epkt8ihuqwtr"]
 
 [ext_resource type="Script" uid="uid://k2ywkdsylcug" path="res://scenes/building/BuildingGhost.cs" id="1_xv63f"]
 
-[node name="BuildingGhost" type="Node2D"]
+[node name="BuildingGhost" type="Node2D" unique_id=1606442076]
 y_sort_enabled = true
 script = ExtResource("1_xv63f")

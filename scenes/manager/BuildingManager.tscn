@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://vmkvijte8wso"]
+[gd_scene format=3 uid="uid://vmkvijte8wso"]
 
 [ext_resource type="Script" uid="uid://cquclydlh158f" path="res://scenes/manager/BuildingManager.cs" id="1_nrqwp"]
 
-[node name="BuildingManager" type="Node"]
+[node name="BuildingManager" type="Node" unique_id=1920551847]
 script = ExtResource("1_nrqwp")
