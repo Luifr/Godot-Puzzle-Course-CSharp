@@ -142,9 +142,10 @@ public partial class BuildingManager : Node
 		var rootCell = hoveredGridArea.Position;
 		var hoveredBuildingComponent =
 			gridManager.GetAllBuildingComponents()
-			.FirstOrDefault((buildingComponent) => buildingComponent.GetGridCellPosition() == rootCell);
+			.FirstOrDefault((buildingComponent) => buildingComponent.IsTileInBuildingArea(rootCell));
 
 		if (hoveredBuildingComponent == null) return;
+		if (!hoveredBuildingComponent.buildingResource.isDeletable) return;
 
 		currentlyUsedResourcesCount -= hoveredBuildingComponent.buildingResource.resourceCost;
 		hoveredBuildingComponent.Destroy();

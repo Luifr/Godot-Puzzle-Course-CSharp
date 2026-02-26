@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using Game.AutoLoad;
 using Game.Manager;
 using Game.Resources.Building;
@@ -11,7 +12,9 @@ public partial class BuildingComponent : Node2D
 {
 
   [Export(PropertyHint.File, "*.tres")]
-  public string buildingResourcePath;
+  private string buildingResourcePath;
+
+  private HashSet<Vector2I> occupiedTiles = new();
 
   #region Public Members
   public BuildingResource buildingResource { get; private set; }
@@ -25,7 +28,7 @@ public partial class BuildingComponent : Node2D
     }
 
     AddToGroup(nameof(BuildingComponent));
-    Callable.From(() => GameEvents.EmitBuildingPlaced(this)).CallDeferred();
+    Callable.From(Initialize).CallDeferred();
   }
 
   public Vector2I GetGridCellPosition()
@@ -35,21 +38,14 @@ public partial class BuildingComponent : Node2D
     return new Vector2I((int)gridPosition.X, (int)gridPosition.Y);
   }
 
-  public List<Vector2I> GetOccupiedCellPositions()
+  public HashSet<Vector2I> GetOccupiedCellPositions()
   {
-    var result = new List<Vector2I>();
-    var gridCellPosition = GetGridCellPosition();
-
-    for (int x = gridCellPosition.X; x < gridCellPosition.X + buildingResource.dimensions.X; x += 1)
-		{
-      for (int y = gridCellPosition.Y; y < gridCellPosition.Y + buildingResource.dimensions.Y; y += 1)
-      {
-        result.Add(new Vector2I(x, y));
-      }
-			
-		}
-
-    return result;
+    return occupiedTiles.ToHashSet();
+  }
+ 
+  public bool IsTileInBuildingArea(Vector2I tilePosition)
+  {
+    return occupiedTiles.Contains(tilePosition);
   }
 
   public void Destroy()
@@ -58,5 +54,26 @@ public partial class BuildingComponent : Node2D
 
     Owner.TreeExited += () => GameEvents.EmitBuildingDestroyed(buildingResource, (Vector2I)GlobalPosition);
     Owner.QueueFree();
+  }
+
+  private void CalculateOccupiedCellPositions()
+  {
+    occupiedTiles.Clear();
+    var gridCellPosition = GetGridCellPosition();
+
+    for (int x = gridCellPosition.X; x < gridCellPosition.X + buildingResource.dimensions.X; x += 1)
+		{
+      for (int y = gridCellPosition.Y; y < gridCellPosition.Y + buildingResource.dimensions.Y; y += 1)
+      {
+        occupiedTiles.Add(new Vector2I(x, y));
+      }
+			
+		}
+  }
+
+  private void Initialize()
+  {
+    CalculateOccupiedCellPositions();
+    GameEvents.EmitBuildingPlaced(this);
   }
 }
