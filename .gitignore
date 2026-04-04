@@ -2,3 +2,4 @@
 .godot/
 /android/
 dump_ignore/
+.vscode/

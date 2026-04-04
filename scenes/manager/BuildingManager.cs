@@ -30,7 +30,7 @@ public partial class BuildingManager : Node
 
 	#region Private members
 	[Export]
-	private int startingResourceCount = 4;
+	private int startingResourceCount = 15;
 	private int currentResourcesCount;
 	private int currentlyUsedResourcesCount;
 	private Rect2I hoveredGridArea = new Rect2I(Vector2I.One, Vector2I.One);
@@ -102,6 +102,7 @@ public partial class BuildingManager : Node
 				buildingGhost.GlobalPosition = mouseGridPosition * GridManager.TILE_SIZE;
 				break;
 			default:
+				// TODO: Check if there is a native c# way to do this
 				throw ExhaustiveMatch.Failed(currentState);
 		}
 	}
@@ -164,26 +165,10 @@ public partial class BuildingManager : Node
 
 	private bool IsBuildingPlaceableAtArea(Rect2I tileArea)
 	{
-		var positions =GetTilePositionsInTileArea(tileArea);
+		if (availableResourceCount < buildingResourceToPlace.resourceCost)
+			return false;
 
-		return
-			positions.All(gridManager.IsTilePositionBuildable) &&
-			availableResourceCount >= buildingResourceToPlace.resourceCost;
-	}
-
-	private List<Vector2I> GetTilePositionsInTileArea(Rect2I tileArea)
-	{
-		var result = new List<Vector2I>();
-
-		for (int x = tileArea.Position.X; x < tileArea.End.X; x += 1)
-		{
-			for (int y = tileArea.Position.Y; y < tileArea.End.Y; y += 1)
-			{
-				result.Add(new Vector2I(x, y));
-			}
-		}
-
-		return result;
+		return gridManager.IsTileAreaBuildable(tileArea);
 	}
 
 	private void UpdateHoveredGridCell()
