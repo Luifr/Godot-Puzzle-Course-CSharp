@@ -11,10 +11,12 @@ public partial class GameUI : CanvasLayer
 	#region Export references
 	[Export]
 	private BuildingResource[] buildingResources;
+	[Export]
+	private PackedScene buildingSectionScene;
 	#endregion
 
 	#region Node references
-	private HBoxContainer hBoxContainer;
+	private VBoxContainer buildingSectionContainer;
 	#endregion
 
 	#region Signals
@@ -31,7 +33,7 @@ public partial class GameUI : CanvasLayer
 		// TEMP
 		woodLabel = GetNode<Label>("%WoodLabel");
 
-		hBoxContainer = GetNode<HBoxContainer>("MarginContainer/HBoxContainer");
+		buildingSectionContainer = GetNode<VBoxContainer>("%BuildingSectionContainer");
 
 		CreateBuildingButtons();
 
@@ -47,12 +49,13 @@ public partial class GameUI : CanvasLayer
 	{
 		foreach (var buildingResource in buildingResources)
 		{
-			var buildingButton = new Button();
-			buildingButton.Text = $"Place {buildingResource.displayName}";
+			var buildingSection = buildingSectionScene.Instantiate<BuildingSection>();
 
-			buildingButton.Pressed += () => EmitSignalPlaceBuildingButtonPressed(buildingResource);
+			buildingSection.SelectButtonPressed += () => EmitSignalPlaceBuildingButtonPressed(buildingResource);
 
-			hBoxContainer.AddChild(buildingButton);
+			buildingSectionContainer.AddChild(buildingSection);
+
+			buildingSection.SetBuildingResource(buildingResource);
 		}
 	}
 }

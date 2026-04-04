@@ -4,10 +4,12 @@
 [ext_resource type="Resource" uid="uid://ngrmlr73fnnq" path="res://resources/building/tower.tres" id="2_r0n4o"]
 [ext_resource type="Resource" uid="uid://bwhsnogfxd60n" path="res://resources/building/village.tres" id="3_eht01"]
 [ext_resource type="Texture2D" uid="uid://d35m33ic0w06f" path="res://assets/wood.png" id="4_eht01"]
+[ext_resource type="PackedScene" uid="uid://dfql3f8vqujbh" path="res://scenes/ui/BuildingSection.tscn" id="5_86tec"]
 
 [node name="GameUI" type="CanvasLayer" unique_id=1527039855]
 script = ExtResource("1_oo06m")
 buildingResources = Array[Object]([ExtResource("3_eht01"), ExtResource("2_r0n4o")])
+buildingSectionScene = ExtResource("5_86tec")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=635766115]
 anchors_preset = 15
@@ -19,6 +21,15 @@ theme_override_constants/margin_left = 32
 theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 32
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=942757760]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="BuildingSectionContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer" unique_id=1092350276]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16
 
 [node name="HBoxContainerTemp" type="HBoxContainer" parent="MarginContainer" unique_id=558291770]
 layout_mode = 2
@@ -37,7 +48,3 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 30
 text = "4"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1104134821]
-layout_mode = 2
-size_flags_vertical = 8
