@@ -4,18 +4,54 @@ using Game.UI;
 using Godot;
 using ExhaustiveMatching;
 using System.Linq;
-using System.Collections.Generic;
+using System;
 
 namespace Game.Manager;
 
 public partial class BuildingManager : Node
 {
 
+	private struct BuildingResources
+	{
+		public BuildingResources(int startingResourceCount, Action<int> AvailableResourceCountChanged)
+		{
+			StartingResourceCount = startingResourceCount;
+			_availableResourceCountChanged = AvailableResourceCountChanged;
+		}
+
+		private Action<int> _availableResourceCountChanged;
+
+		public int StartingResourceCount { get; private set; }
+		private int _currentResourceCount;
+		public int CurrentResourceCount
+		{
+			get => _currentResourceCount;
+			set
+			{
+				_currentResourceCount = value;
+				_availableResourceCountChanged(AvailableResourceCount);
+			}
+		}
+		private int _currentlyUsedResourceCount;
+		public int CurrentlyUsedResourceCount
+		{
+			get => _currentlyUsedResourceCount;
+			set
+			{
+				_currentlyUsedResourceCount = value;
+				_availableResourceCountChanged(AvailableResourceCount);
+			}
+		}
+		public int AvailableResourceCount => StartingResourceCount + CurrentResourceCount - CurrentlyUsedResourceCount;
+	}
+
 	private enum State
 	{
 		Normal,
 		PlacingBuilding
 	}
+
+	[Signal] public delegate void AvailableResourceCountChangedEventHandler(int newResourceCount);
 
 	#region Export node references
 	[Export]
@@ -26,20 +62,16 @@ public partial class BuildingManager : Node
 	private Node2D ySortRoot;
 	[Export]
 	private PackedScene buildingGhostScene;
+	[Export]
+	private int startingResourceCount = 4;
 	#endregion
 
 	#region Private members
-	[Export]
-	private int startingResourceCount = 15;
-	private int currentResourcesCount;
-	private int currentlyUsedResourcesCount;
 	private Rect2I hoveredGridArea = new Rect2I(Vector2I.One, Vector2I.One);
 	private BuildingResource buildingResourceToPlace;
 	private BuildingGhost buildingGhost;
 	private State currentState = State.Normal;
-
-	// TODO: change back to private
-	public int availableResourceCount => startingResourceCount + currentResourcesCount - currentlyUsedResourcesCount;
+	private BuildingResources resources;
 	#endregion
 
 	#region Constants
@@ -50,8 +82,12 @@ public partial class BuildingManager : Node
 
 	public override void _Ready()
 	{
+		resources = new BuildingResources(startingResourceCount, EmitSignalAvailableResourceCountChanged);
+
 		gameUI.PlaceBuildingButtonPressed += OnPlaceBuildingButtonPressed;
 		gridManager.ResourceTilesUpdated += OnResourceTilesUpdated;
+
+		Callable.From(() => EmitSignalAvailableResourceCountChanged(resources.AvailableResourceCount)).CallDeferred();
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -131,7 +167,7 @@ public partial class BuildingManager : Node
 
 		ySortRoot.AddChild(building);
 
-		currentlyUsedResourcesCount += buildingResourceToPlace.resourceCost;
+		resources.CurrentlyUsedResourceCount += buildingResourceToPlace.resourceCost;
 
 		ClearBuildingGhost();
 
@@ -148,7 +184,7 @@ public partial class BuildingManager : Node
 		if (hoveredBuildingComponent == null) return;
 		if (!hoveredBuildingComponent.buildingResource.isDeletable) return;
 
-		currentlyUsedResourcesCount -= hoveredBuildingComponent.buildingResource.resourceCost;
+		resources.CurrentlyUsedResourceCount -= hoveredBuildingComponent.buildingResource.resourceCost;
 		hoveredBuildingComponent.Destroy();
 	}
 
@@ -165,7 +201,7 @@ public partial class BuildingManager : Node
 
 	private bool IsBuildingPlaceableAtArea(Rect2I tileArea)
 	{
-		if (availableResourceCount < buildingResourceToPlace.resourceCost)
+		if (resources.AvailableResourceCount < buildingResourceToPlace.resourceCost)
 			return false;
 
 		return gridManager.IsTileAreaBuildable(tileArea);
@@ -231,6 +267,6 @@ public partial class BuildingManager : Node
 
 	private void OnResourceTilesUpdated(int resourceCount)
 	{
-		currentResourcesCount = resourceCount;
+		resources.CurrentResourceCount = resourceCount;
 	}
 }

@@ -10,6 +10,8 @@ public partial class GameUI : CanvasLayer
 
 	#region Export references
 	[Export]
+	private BuildingManager buildingManager;
+	[Export]
 	private BuildingResource[] buildingResources;
 	[Export]
 	private PackedScene buildingSectionScene;
@@ -17,6 +19,7 @@ public partial class GameUI : CanvasLayer
 
 	#region Node references
 	private VBoxContainer buildingSectionContainer;
+	private Label resourceLabel;
 	#endregion
 
 	#region Signals
@@ -25,25 +28,17 @@ public partial class GameUI : CanvasLayer
 	#endregion
 
 
-	// TEMP
-	Label woodLabel;
-
 	public override void _Ready()
 	{
-		// TEMP
-		woodLabel = GetNode<Label>("%WoodLabel");
 
 		buildingSectionContainer = GetNode<VBoxContainer>("%BuildingSectionContainer");
+		resourceLabel = GetNode<Label>("%ResourceLabel");
+
+		buildingManager.AvailableResourceCountChanged += OnAvailableResourceCountChanged;
 
 		CreateBuildingButtons();
-
 	}
 
-	// TEMP
-	public void UpdateWoodText(int availableWook)
-	{
-		woodLabel.Text = availableWook.ToString();
-	}
 
 	private void CreateBuildingButtons()
 	{
@@ -57,5 +52,10 @@ public partial class GameUI : CanvasLayer
 
 			buildingSection.SetBuildingResource(buildingResource);
 		}
+	}
+
+	private void OnAvailableResourceCountChanged(int newResourceCount)
+	{
+		resourceLabel.Text = newResourceCount.ToString();
 	}
 }

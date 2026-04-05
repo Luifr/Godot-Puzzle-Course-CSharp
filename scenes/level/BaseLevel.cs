@@ -1,7 +1,4 @@
-using Game.AutoLoad;
-using Game.Component;
 using Game.Manager;
-using Game.UI;
 using Godot;
 
 namespace Game;
@@ -17,16 +14,8 @@ public partial class BaseLevel : Node
   private Node2D baseBuilding;
   #endregion
 
-  // TODOT: TEMP remove
-  private GameUI gameUI;
-  private BuildingManager buildingManager;
-
   public override void _Ready()
   {
-    // TOOO: temp remove
-    gameUI = GetNode<GameUI>("GameUI");
-    buildingManager = GetNode<BuildingManager>("BuildingManager");
-    //
 
     gridManager = GetNode<GridManager>("GridManager");
     goldMine = GetNode<GoldMine>("%GoldMine");
@@ -39,9 +28,6 @@ public partial class BaseLevel : Node
 
     gridManager.GridStateUpdated += OnGridStateUpdated;
 
-    // TODO: remove
-    GameEvents.Instance.BuildingPlaced += (_) => gameUI.UpdateWoodText(buildingManager.availableResourceCount);
-    GameEvents.Instance.BuildingDestroyed += (_, _) => gameUI.UpdateWoodText(buildingManager.availableResourceCount);
   }
 
   private void OnGridStateUpdated()

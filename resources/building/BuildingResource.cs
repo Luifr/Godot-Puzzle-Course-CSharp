@@ -8,6 +8,8 @@ public partial class BuildingResource : Resource
 	[Export]
 	public string displayName { get; private set; }
 	[Export]
+	public string description { get; private set; }
+	[Export]
 	public bool isDeletable { get; private set; } = true;
 	[Export]
 	public Vector2I dimensions { get; private set; } = Vector2I.One;

@@ -6,6 +6,9 @@
 
 [node name="Level1" unique_id=2087820598 instance=ExtResource("1_vvrrt")]
 
+[node name="BuildingManager" parent="." index="0" unique_id=1163620225]
+startingResourceCount = 10
+
 [node name="GameCamera" parent="." index="3" unique_id=1813174333]
 position = Vector2(832, 704)
 

@@ -7,13 +7,17 @@ public partial class BuildingSection : PanelContainer
 {
 
 	private Label titleLabel;
+	private Label descriptionsLabel;
+	private Label costLabel;
 	private Button selectButton;
 
 	[Signal] public delegate void SelectButtonPressedEventHandler();
 
 	public override void _Ready()
 	{
-		titleLabel = GetNode<Label>("%Label");
+		titleLabel = GetNode<Label>("%TitleLabel");
+		descriptionsLabel = GetNode<Label>("%DescriptionLabel");
+		costLabel = GetNode<Label>("%CostLabel");
 		selectButton = GetNode<Button>("%Button");
 
 		selectButton.Pressed += EmitSignalSelectButtonPressed;
@@ -22,6 +26,7 @@ public partial class BuildingSection : PanelContainer
 	public void SetBuildingResource(BuildingResource buildingResource)
 	{
 		titleLabel.Text = buildingResource.displayName;
-		selectButton.Text = $"Select (Cost {buildingResource.resourceCost})";
+		costLabel.Text = buildingResource.resourceCost.ToString();
+		descriptionsLabel.Text = buildingResource.description;
 	}
 }

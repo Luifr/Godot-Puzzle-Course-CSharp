@@ -7,6 +7,7 @@
 [resource]
 script = ExtResource("2_itn5u")
 displayName = "Village"
+description = "Gathers wood"
 dimensions = Vector2i(2, 2)
 resourceCost = 2
 resourceRadius = 3

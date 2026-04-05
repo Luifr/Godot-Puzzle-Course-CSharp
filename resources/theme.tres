@@ -20,6 +20,7 @@ axis_stretch_vertical = 1
 region_rect = Rect2(7, 0, 178, 184)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iojti"]
+content_margin_bottom = 16.0
 texture = ExtResource("3_aaf3v")
 texture_margin_left = 23.0
 texture_margin_top = 20.0
@@ -27,7 +28,7 @@ texture_margin_right = 23.0
 texture_margin_bottom = 27.0
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
-region_rect = Rect2(7, 0, 178, 184)
+region_rect = Rect2(5, 0, 182, 184)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_owntx"]
 texture = ExtResource("1_b751m")
@@ -40,6 +41,10 @@ axis_stretch_vertical = 1
 region_rect = Rect2(7, 0, 178, 184)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_11ijc"]
+content_margin_left = 24.0
+content_margin_top = 16.0
+content_margin_right = 24.0
+content_margin_bottom = 32.0
 texture = ExtResource("1_d4nwg")
 texture_margin_left = 32.0
 texture_margin_top = 40.0
@@ -50,6 +55,10 @@ axis_stretch_vertical = 1
 region_rect = Rect2(32, 24, 128, 144)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pge40"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
 texture = ExtResource("2_7ct1h")
 texture_margin_left = 24.0
 texture_margin_top = 24.0
