@@ -23,10 +23,11 @@ ySortRoot = NodePath("../YSortRoot")
 buildingGhostScene = ExtResource("7_jlsqs")
 
 [node name="GridManager" parent="." unique_id=1745279768 node_paths=PackedStringArray("highlightTileMapLayer", "baseTerrainTileMapLayer") instance=ExtResource("2_rarhs")]
-highlightTileMapLayer = NodePath("../HighlightTileMapLayer")
+highlightTileMapLayer = NodePath("../YSortRoot/HighlightTileMapLayer")
 baseTerrainTileMapLayer = NodePath("../YSortRoot/BaseTerrainTileMapLayer")
 
 [node name="GameUI" parent="." unique_id=134630156 node_paths=PackedStringArray("buildingManager") instance=ExtResource("6_c01mt")]
+visible = false
 buildingManager = NodePath("../BuildingManager")
 
 [node name="GameCamera" parent="." unique_id=1813174333 instance=ExtResource("10_fjnsi")]
@@ -50,6 +51,7 @@ y_sort_enabled = true
 [node name="GoldMine" parent="YSortRoot" unique_id=1725562545 instance=ExtResource("7_q8u5g")]
 unique_name_in_owner = true
 
-[node name="HighlightTileMapLayer" type="TileMapLayer" parent="." unique_id=1622743899]
+[node name="HighlightTileMapLayer" type="TileMapLayer" parent="YSortRoot" unique_id=1622743899]
 modulate = Color(1, 1, 1, 0.49803922)
+y_sort_enabled = true
 tile_set = ExtResource("2_rvslj")

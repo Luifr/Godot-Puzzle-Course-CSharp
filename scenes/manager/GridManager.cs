@@ -22,6 +22,7 @@ public partial class GridManager : Node
 	private List<TileMapLayer> allTileMapLayers = new();
 	private Dictionary<TileMapLayer, ElevationLayer> tileMapLayerToElevationLayer = new();
 	private HashSet<Vector2I> validBuildableTiles = new();
+	private HashSet<Vector2I> allTilesInBuildingRadius = new();
 	private HashSet<Vector2I> collectedresourceTiles = new();
 	#endregion
 
@@ -71,6 +72,11 @@ public partial class GridManager : Node
 	public bool IsTilePositionBuildable(Vector2I tilePosition)
 	{
 		return validBuildableTiles.Contains(tilePosition);
+	}
+
+	public bool IsTilePositionInAnyBuildingRadius(Vector2I tilePosition)
+	{
+		return allTilesInBuildingRadius.Contains(tilePosition);
 	}
 
 	public bool IsTileAreaBuildable(Rect2I tileArea)
@@ -197,6 +203,9 @@ public partial class GridManager : Node
 		var tileArea = new Rect2I(rootCell, buildingComponent.buildingResource.dimensions);
 		var validTiles = GetValidTilesInRadius(tileArea, buildingComponent.buildingResource.buildableRadius);
 
+		var allTiles = GetTilesInRadius(tileArea, buildingComponent.buildingResource.buildableRadius, (_) => true);
+		allTilesInBuildingRadius.UnionWith(allTiles);
+
 		validBuildableTiles.UnionWith(validTiles);
 
 		validBuildableTiles.ExceptWith(GetOccupiedTiles());
@@ -218,6 +227,7 @@ public partial class GridManager : Node
 	private void RecalculateValidTiles()
 	{
 		validBuildableTiles.Clear();
+		allTilesInBuildingRadius.Clear();
 		var buildingComponents = GetAllBuildingComponents();
 
 		foreach (var buildingComponent in buildingComponents)

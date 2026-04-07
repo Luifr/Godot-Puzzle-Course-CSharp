@@ -1,4 +1,5 @@
 using Game.Manager;
+using Game.Resources.Level;
 using Game.UI;
 using Godot;
 
@@ -9,6 +10,8 @@ public partial class BaseLevel : Node
 
   [Export]
   private PackedScene LevelCompleteScreenScene;
+  [Export]
+  private LevelDefinitionResource levelDefinitionResource;
 
   #region Node references
   private GridManager gridManager;
@@ -17,17 +20,21 @@ public partial class BaseLevel : Node
   private TileMapLayer baseTerrainTileMapLayer;
   private Node2D baseBuilding;
   private GameUI gameUI;
+  private BuildingManager buildingManager;
   #endregion
 
   public override void _Ready()
   {
 
     gridManager = GetNode<GridManager>("GridManager");
+    buildingManager = GetNode<BuildingManager>("BuildingManager");
     gameUI = GetNode<GameUI>("GameUI");
     goldMine = GetNode<GoldMine>("%GoldMine");
     gameCamera = GetNode<GameCamera>("GameCamera");
     baseTerrainTileMapLayer = GetNode<TileMapLayer>("%BaseTerrainTileMapLayer");
     baseBuilding = GetNode<Node2D>("%Base");
+
+    buildingManager.SetStartingResourceCount(levelDefinitionResource.startingResourceCount);
 
     gameCamera.SetBoundingRect(baseTerrainTileMapLayer.GetUsedRect());
     gameCamera.CenterOnPosition(baseBuilding.GlobalPosition);
@@ -39,7 +46,7 @@ public partial class BaseLevel : Node
   private void OnGridStateUpdated()
   {
     var goldMineTilePosition = gridManager.ConvertWorldPositionToTilePosition(goldMine.GlobalPosition);
-    if (gridManager.IsTilePositionBuildable(goldMineTilePosition))
+    if (gridManager.IsTilePositionInAnyBuildingRadius(goldMineTilePosition))
     {
       goldMine.SetActive();
       var levelCompleteScreenScene = LevelCompleteScreenScene.Instantiate<LevelCompleteScreen>();

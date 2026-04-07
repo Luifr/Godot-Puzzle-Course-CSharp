@@ -21,7 +21,7 @@ public partial class BuildingManager : Node
 
 		private Action<int> _availableResourceCountChanged;
 
-		public int StartingResourceCount { get; private set; }
+		public int StartingResourceCount { get; set; }
 		private int _currentResourceCount;
 		public int CurrentResourceCount
 		{
@@ -62,8 +62,6 @@ public partial class BuildingManager : Node
 	private Node2D ySortRoot;
 	[Export]
 	private PackedScene buildingGhostScene;
-	[Export]
-	private int startingResourceCount = 4;
 	#endregion
 
 	#region Private members
@@ -82,7 +80,7 @@ public partial class BuildingManager : Node
 
 	public override void _Ready()
 	{
-		resources = new BuildingResources(startingResourceCount, EmitSignalAvailableResourceCountChanged);
+		resources = new BuildingResources(0, EmitSignalAvailableResourceCountChanged);
 
 		gameUI.PlaceBuildingButtonPressed += OnPlaceBuildingButtonPressed;
 		gridManager.ResourceTilesUpdated += OnResourceTilesUpdated;
@@ -141,6 +139,11 @@ public partial class BuildingManager : Node
 				// TODO: Check if there is a native c# way to do this
 				throw ExhaustiveMatch.Failed(currentState);
 		}
+	}
+
+	public void SetStartingResourceCount(int count)
+	{
+		resources.StartingResourceCount = count;
 	}
 
 	private void UpdateGridDisplay()
@@ -260,6 +263,7 @@ public partial class BuildingManager : Node
 
 		var buildingSprite = buildingResource.spriteScene.Instantiate<Sprite2D>();
 		buildingGhost.AddChild(buildingSprite);
+		buildingGhost.SetDimensions(buildingResource.dimensions);
 
 		buildingResourceToPlace = buildingResource;
 		UpdateGridDisplay();

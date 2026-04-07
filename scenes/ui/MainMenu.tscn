@@ -6,53 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://bguagmagj4gne" path="res://scenes/building/Village.tscn" id="3_xpiny"]
 [ext_resource type="PackedScene" uid="uid://bgu11wxwr5v31" path="res://scenes/building/Base.tscn" id="4_bhu4a"]
 [ext_resource type="PackedScene" uid="uid://cyfunv42pexgx" path="res://scenes/GoldMine.tscn" id="5_e2per"]
+[ext_resource type="PackedScene" uid="uid://cpmcafrq46e67" path="res://scenes/ui/LevelSelectScreen.tscn" id="7_e2per"]
 
 [node name="MainMenu" type="Node" unique_id=2051378227]
 script = ExtResource("1_bhu4a")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=449290986]
 position = Vector2(576, 384)
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2074729773]
-
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer" unique_id=286738630]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/MarginContainer" unique_id=1933844116]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MarginContainer/PanelContainer" unique_id=1162155873]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer" unique_id=1891154530]
-custom_minimum_size = Vector2(192, 0)
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="PlayButton" type="Button" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1928200909]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Play"
-
-[node name="OptionsButton" type="Button" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2145673896]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Options"
-
-[node name="QuitButton" type="Button" parent="CanvasLayer/MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=646967046]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Quit"
 
 [node name="YSortRoot" type="Node2D" parent="." unique_id=1094962598]
 y_sort_enabled = true
@@ -106,3 +66,49 @@ position = Vector2(128, 512)
 [node name="GoldMine" parent="YSortRoot" unique_id=1363808140 instance=ExtResource("5_e2per")]
 unique_name_in_owner = true
 position = Vector2(640, 192)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2074729773]
+
+[node name="MainMenuContainer" type="MarginContainer" parent="CanvasLayer" unique_id=286738630]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/MainMenuContainer" unique_id=1933844116]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenuContainer/PanelContainer" unique_id=1162155873]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenuContainer/PanelContainer/MarginContainer" unique_id=1891154530]
+custom_minimum_size = Vector2(192, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="PlayButton" type="Button" parent="CanvasLayer/MainMenuContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1928200909]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Play"
+
+[node name="OptionsButton" type="Button" parent="CanvasLayer/MainMenuContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2145673896]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Options"
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/MainMenuContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=646967046]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Quit"
+
+[node name="LevelSelectScreen" parent="CanvasLayer" unique_id=503396555 instance=ExtResource("7_e2per")]
+unique_name_in_owner = true
+visible = false
