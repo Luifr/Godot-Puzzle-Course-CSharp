@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://4u6k0qhfe65t"]
 
 [ext_resource type="Script" uid="uid://dm6c6wi034cng" path="res://scenes/level/BaseLevel.cs" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://dnsccq0dwpgky" path="res://scenes/ui/LevelCompleteScreen.tscn" id="2_53232"]
 [ext_resource type="PackedScene" uid="uid://vmkvijte8wso" path="res://scenes/manager/BuildingManager.tscn" id="2_nxtc6"]
 [ext_resource type="PackedScene" uid="uid://djq1phg5uv4l4" path="res://scenes/manager/GridManager.tscn" id="2_rarhs"]
 [ext_resource type="TileSet" uid="uid://dqgpcpx5wdfe3" path="res://resources/highlight_tileset.tres" id="2_rvslj"]
@@ -13,6 +14,7 @@
 
 [node name="BaseLevel" type="Node" unique_id=2118511925]
 script = ExtResource("1_o5qli")
+LevelCompleteScreenScene = ExtResource("2_53232")
 
 [node name="BuildingManager" parent="." unique_id=1163620225 node_paths=PackedStringArray("gridManager", "gameUI", "ySortRoot") instance=ExtResource("2_nxtc6")]
 gridManager = NodePath("../GridManager")
@@ -33,6 +35,7 @@ buildingManager = NodePath("../BuildingManager")
 y_sort_enabled = true
 
 [node name="BaseTerrainTileMapLayer" type="TileMapLayer" parent="YSortRoot" unique_id=395898874]
+unique_name_in_owner = true
 y_sort_enabled = true
 tile_set = ExtResource("3_0bbpv")
 

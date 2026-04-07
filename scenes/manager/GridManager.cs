@@ -48,6 +48,12 @@ public partial class GridManager : Node
 		MapTileMapLayersToElevationLayers();
 	}
 
+	public override void _ExitTree()
+	{
+		GameEvents.Instance.BuildingPlaced -= OnBuildingPlaced;
+		GameEvents.Instance.BuildingDestroyed -= OnBuildingDestroyed;
+	}
+
 	public (TileMapLayer, bool) GetTileCustomData(Vector2I tilePosition, string dataName)
 	{
 		foreach (var layer in allTileMapLayers)

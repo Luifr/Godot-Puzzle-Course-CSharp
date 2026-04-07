@@ -11,6 +11,6 @@ script = ExtResource("1_oanoc")
 y_sort_enabled = true
 tile_set = ExtResource("2_8irq6")
 
-[node name="TerraiLayer" type="TileMapLayer" parent="." unique_id=865184795]
+[node name="TerrainLayer" type="TileMapLayer" parent="." unique_id=865184795]
 y_sort_enabled = true
 tile_set = ExtResource("2_8irq6")

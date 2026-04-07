@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="Puzzle Course CS"
-run/main_scene="uid://choay0n7kekwk"
+run/main_scene="uid://dpp1gj6r3guca"
 config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-GameEvents="*res://autoload/GameEvents.tscn"
+GameEvents="*res://scenes/autoload/GameEvents.tscn"
+LevelManager="*uid://cglli7w22r0qk"
 
 [display]
 

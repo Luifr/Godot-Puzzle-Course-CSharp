@@ -39,6 +39,11 @@ public partial class GameUI : CanvasLayer
 		CreateBuildingButtons();
 	}
 
+	public void HideUI()
+	{
+		Hide();
+	}
+
 
 	private void CreateBuildingButtons()
 	{
