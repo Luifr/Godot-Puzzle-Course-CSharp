@@ -5,6 +5,7 @@ using Godot;
 using ExhaustiveMatching;
 using System.Linq;
 using System;
+using Game.Component;
 
 namespace Game.Manager;
 
@@ -68,6 +69,7 @@ public partial class BuildingManager : Node
 	private Rect2I hoveredGridArea = new Rect2I(Vector2I.One, Vector2I.One);
 	private BuildingResource buildingResourceToPlace;
 	private BuildingGhost buildingGhost;
+	private Vector2 buildingGhostDimensions;
 	private State currentState = State.Normal;
 	private BuildingResources resources;
 	#endregion
@@ -120,13 +122,15 @@ public partial class BuildingManager : Node
 	public override void _Process(double delta)
 	{
 
-		var mouseGridPosition = gridManager.GetMouseGridCellPosition();
+		Vector2I mouseGridPosition;
 
 		switch (currentState)
 		{
 			case State.Normal:
+				mouseGridPosition = gridManager.GetMouseGridCellPosition();
 				break;
 			case State.PlacingBuilding:
+				mouseGridPosition = gridManager.GetMouseGridCellPositionWithDimensionOffset(buildingGhostDimensions);
 				buildingGhost.GlobalPosition = mouseGridPosition * GridManager.TILE_SIZE;
 				break;
 			default:
@@ -168,9 +172,11 @@ public partial class BuildingManager : Node
 	private void PlaceBuildingAtHoveredCellPosition()
 	{
 		var building = buildingResourceToPlace.buildableScene.Instantiate<Node2D>();
-		building.GlobalPosition = hoveredGridArea.Position * GridManager.TILE_SIZE;
-
 		ySortRoot.AddChild(building);
+
+		building.GlobalPosition = hoveredGridArea.Position * GridManager.TILE_SIZE;
+		building.GetFirstNodeOfType<BuildingAnimatorComponent>()?.PlayInAnimation();
+
 
 		resources.CurrentlyUsedResourceCount += buildingResourceToPlace.resourceCost;
 
@@ -187,7 +193,7 @@ public partial class BuildingManager : Node
 			.FirstOrDefault((buildingComponent) => buildingComponent.IsTileInBuildingArea(rootCell));
 
 		if (hoveredBuildingComponent == null) return;
-		if (!hoveredBuildingComponent.buildingResource.isDeletable) return;
+		if (!hoveredBuildingComponent.buildingResource.isDeletable || !hoveredBuildingComponent.CanDestroy()) return;
 
 		resources.CurrentlyUsedResourceCount -= hoveredBuildingComponent.buildingResource.resourceCost;
 		hoveredBuildingComponent.Destroy();
@@ -263,10 +269,13 @@ public partial class BuildingManager : Node
 
 		ySortRoot.AddChild(buildingGhost);
 
+		var mouseGridPos = gridManager.GetMouseGridCellPosition();
+
 		var buildingSprite = buildingResource.spriteScene.Instantiate<Sprite2D>();
 		buildingGhost.AddSpriteNode(buildingSprite);
+		buildingGhost.SetBuildingGhostGlobalPosition(mouseGridPos * GridManager.TILE_SIZE);
 		buildingGhost.SetDimensions(buildingResource.dimensions);
-
+		buildingGhostDimensions = buildingResource.dimensions;
 
 		buildingResourceToPlace = buildingResource;
 		UpdateGridDisplay();

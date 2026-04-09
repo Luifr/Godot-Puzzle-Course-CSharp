@@ -54,6 +54,12 @@ public partial class BuildingGhost : Node2D
     bottomRight.Position = dimensions * new Vector2I(64, 64);
   }
 
+  public void SetBuildingGhostGlobalPosition(Vector2 globalPosition)
+  {
+    GlobalPosition = globalPosition;
+    spriteRoot.GlobalPosition = globalPosition;
+  }
+
   public void AddSpriteNode(Node2D spriteNode)
   {
     upDownRoot.AddChild(spriteNode);

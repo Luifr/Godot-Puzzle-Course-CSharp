@@ -42,10 +42,18 @@ public partial class BuildingComponent : Node2D
   {
     return occupiedTiles.ToHashSet();
   }
- 
+
   public bool IsTileInBuildingArea(Vector2I tilePosition)
   {
     return occupiedTiles.Contains(tilePosition);
+  }
+
+  public bool CanDestroy()
+  {
+    var buildingAnimatorComponent = Owner.GetFirstNodeOfType<BuildingAnimatorComponent>();
+    if (buildingAnimatorComponent == null) return true;
+
+    return !buildingAnimatorComponent.IsPlayingAnimation();
   }
 
   public void Destroy()
@@ -53,7 +61,13 @@ public partial class BuildingComponent : Node2D
     if (Owner == null) return;
 
     Owner.TreeExited += () => GameEvents.EmitBuildingDestroyed(buildingResource, (Vector2I)GlobalPosition);
-    Owner.QueueFree();
+    var buildingAnimatorComponent = Owner.GetFirstNodeOfType<BuildingAnimatorComponent>();
+    buildingAnimatorComponent?.PlayDestroyAnimation();
+
+    if (buildingAnimatorComponent == null)
+      Owner.QueueFree();
+    else
+      buildingAnimatorComponent.DestroyAnimationFinished += Owner.QueueFree;
   }
 
   private void CalculateOccupiedCellPositions()
@@ -62,13 +76,13 @@ public partial class BuildingComponent : Node2D
     var gridCellPosition = GetGridCellPosition();
 
     for (int x = gridCellPosition.X; x < gridCellPosition.X + buildingResource.dimensions.X; x += 1)
-		{
+    {
       for (int y = gridCellPosition.Y; y < gridCellPosition.Y + buildingResource.dimensions.Y; y += 1)
       {
         occupiedTiles.Add(new Vector2I(x, y));
       }
-			
-		}
+
+    }
   }
 
   private void Initialize()

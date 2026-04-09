@@ -138,6 +138,15 @@ public partial class GridManager : Node
 		highlightTileMapLayer.Clear();
 	}
 
+	public Vector2I GetMouseGridCellPositionWithDimensionOffset(Vector2 dimensions)
+	{
+		var mousePosition = highlightTileMapLayer.GetGlobalMousePosition() / 64;
+		mousePosition -= dimensions / 2;
+		mousePosition = mousePosition.Round();
+
+		return (Vector2I)mousePosition;
+	}
+
 	public Vector2I GetMouseGridCellPosition()
 	{
 		var mousePosition = highlightTileMapLayer.GetGlobalMousePosition();
