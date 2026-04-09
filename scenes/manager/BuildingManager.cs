@@ -122,12 +122,6 @@ public partial class BuildingManager : Node
 
 		var mouseGridPosition = gridManager.GetMouseGridCellPosition();
 
-		if (mouseGridPosition != hoveredGridArea.Position)
-		{
-			hoveredGridArea.Position = mouseGridPosition;
-			UpdateHoveredGridCell();
-		}
-
 		switch (currentState)
 		{
 			case State.Normal:
@@ -138,6 +132,12 @@ public partial class BuildingManager : Node
 			default:
 				// TODO: Check if there is a native c# way to do this
 				throw ExhaustiveMatch.Failed(currentState);
+		}
+
+		if (mouseGridPosition != hoveredGridArea.Position)
+		{
+			hoveredGridArea.Position = mouseGridPosition;
+			UpdateHoveredGridCell();
 		}
 	}
 
@@ -161,6 +161,8 @@ public partial class BuildingManager : Node
 		{
 			buildingGhost.SetInvalid();
 		}
+
+		buildingGhost.DoHoverAnimation();
 	}
 
 	private void PlaceBuildingAtHoveredCellPosition()
@@ -262,8 +264,9 @@ public partial class BuildingManager : Node
 		ySortRoot.AddChild(buildingGhost);
 
 		var buildingSprite = buildingResource.spriteScene.Instantiate<Sprite2D>();
-		buildingGhost.AddChild(buildingSprite);
+		buildingGhost.AddSpriteNode(buildingSprite);
 		buildingGhost.SetDimensions(buildingResource.dimensions);
+
 
 		buildingResourceToPlace = buildingResource;
 		UpdateGridDisplay();
