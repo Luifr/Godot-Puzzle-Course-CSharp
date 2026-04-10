@@ -153,11 +153,30 @@ public partial class BuildingManager : Node
 	private void UpdateGridDisplay()
 	{
 		gridManager.ClearHighlightedTiles();
-		gridManager.HighlightBuildableTiles();
+
+		if (buildingResourceToPlace.IsAttackBuilding)
+		{
+			gridManager.HighlightGoblinOccupiedTiles();
+			gridManager.HighlightBuildableTiles(true);
+		}
+		else
+		{
+			gridManager.HighlightBuildableTiles();
+			gridManager.HighlightGoblinOccupiedTiles();
+		}
+
 
 		if (IsBuildingPlaceableAtArea(hoveredGridArea))
 		{
-			gridManager.HighlightExpandedBuildableTiles(hoveredGridArea, buildingResourceToPlace.buildableRadius);
+			if (buildingResourceToPlace.IsAttackBuilding)
+			{
+				gridManager.HighlightBuildableAttackTiles(hoveredGridArea, buildingResourceToPlace.attackRadius);
+			}
+			else
+			{
+				gridManager.HighlightExpandedBuildableTiles(hoveredGridArea, buildingResourceToPlace.buildableRadius);
+			}
+
 			gridManager.HighlightResourceTiles(hoveredGridArea, buildingResourceToPlace.resourceRadius);
 			buildingGhost.SetValid();
 		}
@@ -193,7 +212,12 @@ public partial class BuildingManager : Node
 			.FirstOrDefault((buildingComponent) => buildingComponent.IsTileInBuildingArea(rootCell));
 
 		if (hoveredBuildingComponent == null) return;
-		if (!hoveredBuildingComponent.buildingResource.isDeletable || !hoveredBuildingComponent.CanDestroy()) return;
+
+		if (
+			!hoveredBuildingComponent.buildingResource.isDeletable ||
+			!hoveredBuildingComponent.CanDestroy() ||
+			!gridManager.CanDestroyBuilding(hoveredBuildingComponent)
+		) return;
 
 		resources.CurrentlyUsedResourceCount -= hoveredBuildingComponent.buildingResource.resourceCost;
 		hoveredBuildingComponent.Destroy();
@@ -215,7 +239,7 @@ public partial class BuildingManager : Node
 		if (resources.AvailableResourceCount < buildingResourceToPlace.resourceCost)
 			return false;
 
-		return gridManager.IsTileAreaBuildable(tileArea);
+		return gridManager.IsTileAreaBuildable(tileArea, buildingResourceToPlace.IsAttackBuilding);
 	}
 
 	private void UpdateHoveredGridCell()

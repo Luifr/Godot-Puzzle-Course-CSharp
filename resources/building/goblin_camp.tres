@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BuildingResource" format=3 uid="uid://c84i70jwrn0or"]
+
+[ext_resource type="PackedScene" uid="uid://cppgr2kggbcma" path="res://scenes/building/GoblinCamp.tscn" id="1_dvyaa"]
+[ext_resource type="Script" uid="uid://baatle530l6qi" path="res://resources/building/BuildingResource.cs" id="1_g2a58"]
+
+[resource]
+script = ExtResource("1_g2a58")
+displayName = "Goblin Camp"
+isDeletable = false
+dimensions = Vector2i(2, 2)
+dangerRadius = 8
+buildableScene = ExtResource("1_dvyaa")
+metadata/_custom_type_script = "uid://baatle530l6qi"

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LevelDefinitionResource" format=3 uid="uid://de1rwim4u1l1a"]
+
+[ext_resource type="Script" uid="uid://dfovvac8tqmsb" path="res://resources/level/LevelDefinitionResource.cs" id="1_abris"]
+
+[resource]
+script = ExtResource("1_abris")
+Id = "enemy_spotted"
+startingResourceCount = 40
+LevelScenePath = "uid://bubw6bn2156bs"
+metadata/_custom_type_script = "uid://dfovvac8tqmsb"

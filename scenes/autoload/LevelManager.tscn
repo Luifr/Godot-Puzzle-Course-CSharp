@@ -4,7 +4,8 @@
 [ext_resource type="Resource" uid="uid://cqk803bcgl8jh" path="res://resources/level/level_01.tres" id="2_ru5rf"]
 [ext_resource type="Resource" uid="uid://b3bdfrho7pc0b" path="res://resources/level/level_02.tres" id="3_gv7sw"]
 [ext_resource type="Resource" uid="uid://bsqhecvm8lu2i" path="res://resources/level/level_03.tres" id="4_cuxrr"]
+[ext_resource type="Resource" uid="uid://de1rwim4u1l1a" path="res://resources/level/level_04.tres" id="5_gv7sw"]
 
 [node name="LevelManager" type="Node" unique_id=1277370907]
 script = ExtResource("1_jef10")
-levelDefinitions = Array[Object]([ExtResource("2_ru5rf"), ExtResource("3_gv7sw"), ExtResource("4_cuxrr")])
+levelDefinitions = Array[Object]([ExtResource("2_ru5rf"), ExtResource("3_gv7sw"), ExtResource("4_cuxrr"), ExtResource("5_gv7sw")])

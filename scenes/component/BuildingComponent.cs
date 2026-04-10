@@ -18,6 +18,7 @@ public partial class BuildingComponent : Node2D
 
   #region Public Members
   public BuildingResource buildingResource { get; private set; }
+  public bool isDisabled { get; private set; }
   #endregion
 
   public override void _Ready()
@@ -41,6 +42,12 @@ public partial class BuildingComponent : Node2D
   public HashSet<Vector2I> GetOccupiedCellPositions()
   {
     return occupiedTiles.ToHashSet();
+  }
+
+  public Rect2I GetTileArea()
+  {
+    var rootCell = GetGridCellPosition();
+    return new Rect2I(rootCell, buildingResource.dimensions);
   }
 
   public bool IsTileInBuildingArea(Vector2I tilePosition)
@@ -68,6 +75,22 @@ public partial class BuildingComponent : Node2D
       Owner.QueueFree();
     else
       buildingAnimatorComponent.DestroyAnimationFinished += Owner.QueueFree;
+  }
+
+  public void Enable()
+  {
+    if (!isDisabled) return;
+
+    isDisabled = false;
+    GameEvents.EmitBuildingEnabled(this);
+  }
+
+  public void Disable()
+  {
+    if (isDisabled) return;
+
+    isDisabled = true;
+    GameEvents.EmitBuildingDisabled(this);
   }
 
   private void CalculateOccupiedCellPositions()

@@ -12,6 +12,10 @@ public partial class GameEvents : Node
 	[Signal]
 	public delegate void BuildingPlacedEventHandler(BuildingComponent buildingComponent);
 	[Signal]
+	public delegate void BuildingEnabledEventHandler(BuildingComponent buildingComponent);
+	[Signal]
+	public delegate void BuildingDisabledEventHandler(BuildingComponent buildingComponent);
+	[Signal]
 	public delegate void BuildingDestroyedEventHandler(BuildingResource buildingResource, Vector2I buildingPosition);
 	#endregion
 
@@ -23,6 +27,16 @@ public partial class GameEvents : Node
 	public static void EmitBuildingPlaced(BuildingComponent buildingComponent)
 	{
 		Instance.EmitSignalBuildingPlaced(buildingComponent);
+	}
+
+	public static void EmitBuildingEnabled(BuildingComponent buildingComponent)
+	{
+		Instance.EmitSignalBuildingEnabled(buildingComponent);
+	}
+
+	public static void EmitBuildingDisabled(BuildingComponent buildingComponent)
+	{
+		Instance.EmitSignalBuildingDisabled(buildingComponent);
 	}
 
 	public static void EmitBuildingDestroyed(BuildingResource buildingResource, Vector2I buildingPosition)
