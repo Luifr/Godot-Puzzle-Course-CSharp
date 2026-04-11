@@ -202,10 +202,12 @@ public partial class GridManager : Node
 			var dependentBuildings = GetAllBuildingComponents()
 				.Where(buildingComponent =>
 				{
+					if (buildingComponent == toDestroyBuildingComponent || buildingComponent.buildingResource.isBase) return false;
+
 					var anyTilesInRadius = buildingComponent.GetTileArea().ToTiles()
 						.Any(tilePosition => buildingToBuildable[toDestroyBuildingComponent].Contains(tilePosition));
 
-					return buildingComponent != toDestroyBuildingComponent && anyTilesInRadius;
+					return anyTilesInRadius;
 				});
 
 			var allBuildingsStillValid = dependentBuildings.All(dependentBuilding =>
@@ -214,21 +216,67 @@ public partial class GridManager : Node
 				return tilesForBuilding.All(tilePosition =>
 				{
 					var tileIsInSet = buildingToBuildable.Keys
-						.Any(buildingComponent => buildingComponent != toDestroyBuildingComponent && buildingToBuildable[buildingComponent].Contains(tilePosition));
+						.Any(buildingComponent =>
+							buildingComponent != toDestroyBuildingComponent &&
+							buildingComponent != dependentBuilding &&
+							buildingToBuildable[buildingComponent].Contains(tilePosition)
+						);
 
 					return tileIsInSet;
 				});
 			});
 
-			return allBuildingsStillValid;
+			return allBuildingsStillValid && IsBuildingNetworkConnected(toDestroyBuildingComponent);
 		}
 
 		return true;
 	}
 
-	public IEnumerable<BuildingComponent> GetAllBuildingComponents()
+	private bool IsBuildingNetworkConnected(BuildingComponent toDestroyBuildingComponent)
 	{
-		return GetTree().GetNodesInGroup(nameof(BuildingComponent)).Cast<BuildingComponent>();
+		var allBuildingComponents = GetAllBuildingComponents();
+		var baseBuilding = allBuildingComponents.First(buildingComponent => buildingComponent.buildingResource.isBase);
+
+		var visitedBuildings = new HashSet<BuildingComponent>();
+		VisitAllConnectedBuildings(allBuildingComponents, baseBuilding, toDestroyBuildingComponent, visitedBuildings);
+
+		var totalBuildingsToVisit = allBuildingComponents.Count(buildingComponent =>
+			toDestroyBuildingComponent != buildingComponent && buildingComponent.buildingResource.buildableRadius > 0
+		);
+
+		return totalBuildingsToVisit == visitedBuildings.Count;
+	}
+
+	private void VisitAllConnectedBuildings(
+		List<BuildingComponent> allBuildingComponents,
+		BuildingComponent rootBuilding,
+		BuildingComponent excludeBuilding,
+		HashSet<BuildingComponent> visitedBuildings
+	)
+	{
+		var dependentBuildings = allBuildingComponents
+				.Where(buildingComponent =>
+				{
+					if (buildingComponent.buildingResource.buildableRadius <= 0) return false;
+					if (visitedBuildings.Contains(buildingComponent)) return false;
+
+					var anyTilesInRadius = buildingComponent.GetTileArea().ToTiles()
+						.Any(tilePosition => buildingToBuildable[rootBuilding].Contains(tilePosition));
+
+					return buildingComponent != excludeBuilding && anyTilesInRadius;
+				}).ToList();
+
+		visitedBuildings.UnionWith(dependentBuildings);
+
+		foreach (var dependentBuilding in dependentBuildings)
+		{
+			VisitAllConnectedBuildings(allBuildingComponents, dependentBuilding, excludeBuilding, visitedBuildings);
+		}
+	}
+
+	public List<BuildingComponent> GetAllBuildingComponents()
+	{
+		return GetTree().GetNodesInGroup(nameof(BuildingComponent)).Cast<BuildingComponent>().ToList();
 	}
 
 	private HashSet<Vector2I> GetBuildableTileSet(bool isAttackTiles = false)
@@ -338,6 +386,7 @@ public partial class GridManager : Node
 		allTilesInBuildingRadius.Clear();
 		goblinOccupiedTiles.Clear();
 		attackTiles.Clear();
+		collectedresourceTiles.Clear();
 		buildingToBuildable.Clear();
 
 		var buildingComponents = GetAllBuildingComponents();
@@ -349,6 +398,7 @@ public partial class GridManager : Node
 
 		CheckGoblinCampDestruction();
 
+		EmitSignalResourceTilesUpdated(collectedresourceTiles.Count);
 		EmitSignalGridStateUpdated();
 	}
 
@@ -420,7 +470,7 @@ public partial class GridManager : Node
 		);
 	}
 
-	private IEnumerable<Vector2I> GetOccupiedTiles()
+	private List<Vector2I> GetOccupiedTiles()
 	{
 		var buildingComponents = GetAllBuildingComponents();
 		var occupiedPositions = new List<Vector2I>();

@@ -10,6 +10,8 @@ public partial class BuildingResource : Resource
 	[Export]
 	public string description { get; private set; }
 	[Export]
+	public bool isBase { get; private set; } = false;
+	[Export]
 	public bool isDeletable { get; private set; } = true;
 	[Export]
 	public Vector2I dimensions { get; private set; } = Vector2I.One;
@@ -28,7 +30,7 @@ public partial class BuildingResource : Resource
 	[Export]
 	public PackedScene spriteScene { get; private set; }
 
-	public bool IsResourceBuilding { get => attackRadius > 0; }
+	public bool IsResourceBuilding { get => resourceRadius > 0; }
 	public bool IsAttackBuilding { get => attackRadius > 0; }
 
 	public bool IsDangerBuilding { get => dangerRadius > 0; }

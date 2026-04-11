@@ -45,6 +45,6 @@ position = Vector2(-192, 384)
 position = Vector2(832, 704)
 
 [node name="GoblinCamp" parent="YSortRoot" parent_id_path=PackedInt32Array(321826738) index="4" unique_id=1220402346 instance=ExtResource("5_2tqg5")]
-position = Vector2(1088, 1024)
+position = Vector2(640, 128)
 
 [editable path="YSortRoot/BaseTerrainTileMapLayer/ElevationLayer"]

@@ -14,13 +14,11 @@ public partial class BuildingManager : Node
 
 	private struct BuildingResources
 	{
-		public BuildingResources(int startingResourceCount, Action<int> AvailableResourceCountChanged)
+		public BuildingResources(int startingResourceCount)
 		{
 			StartingResourceCount = startingResourceCount;
-			_availableResourceCountChanged = AvailableResourceCountChanged;
 		}
 
-		private Action<int> _availableResourceCountChanged;
 
 		public int StartingResourceCount { get; set; }
 		private int _currentResourceCount;
@@ -30,7 +28,6 @@ public partial class BuildingManager : Node
 			set
 			{
 				_currentResourceCount = value;
-				_availableResourceCountChanged(AvailableResourceCount);
 			}
 		}
 		private int _currentlyUsedResourceCount;
@@ -40,7 +37,6 @@ public partial class BuildingManager : Node
 			set
 			{
 				_currentlyUsedResourceCount = value;
-				_availableResourceCountChanged(AvailableResourceCount);
 			}
 		}
 		public int AvailableResourceCount => StartingResourceCount + CurrentResourceCount - CurrentlyUsedResourceCount;
@@ -82,7 +78,7 @@ public partial class BuildingManager : Node
 
 	public override void _Ready()
 	{
-		resources = new BuildingResources(0, EmitSignalAvailableResourceCountChanged);
+		resources = new BuildingResources(0);
 
 		gameUI.PlaceBuildingButtonPressed += OnPlaceBuildingButtonPressed;
 		gridManager.ResourceTilesUpdated += OnResourceTilesUpdated;
@@ -201,6 +197,8 @@ public partial class BuildingManager : Node
 
 		ClearBuildingGhost();
 
+		EmitSignalAvailableResourceCountChanged(resources.AvailableResourceCount);
+
 		ChangeState(State.Normal);
 	}
 
@@ -308,5 +306,6 @@ public partial class BuildingManager : Node
 	private void OnResourceTilesUpdated(int resourceCount)
 	{
 		resources.CurrentResourceCount = resourceCount;
+		EmitSignalAvailableResourceCountChanged(resources.AvailableResourceCount);
 	}
 }

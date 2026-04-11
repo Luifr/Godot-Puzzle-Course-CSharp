@@ -27,7 +27,7 @@ public partial class LevelManager : Node
 	{
 		if (levelIndex >= levelDefinitions.Length || levelIndex < 0)
 		{
-			GD.Print("LevelManager:ChangeToLevel Invalid level index. LevelIndex is " + levelIndex.ToString());
+			GD.PushError("LevelManager:ChangeToLevel Invalid level index. LevelIndex is " + levelIndex.ToString());
 			return;
 		}
 
