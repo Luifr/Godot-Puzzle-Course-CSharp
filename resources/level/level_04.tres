@@ -5,6 +5,5 @@
 [resource]
 script = ExtResource("1_abris")
 Id = "enemy_spotted"
-startingResourceCount = 40
 LevelScenePath = "uid://bubw6bn2156bs"
 metadata/_custom_type_script = "uid://dfovvac8tqmsb"

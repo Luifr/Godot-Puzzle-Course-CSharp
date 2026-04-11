@@ -205,15 +205,15 @@ public partial class BuildingManager : Node
 	private void DestroyBuildingAtHoveredCellPosition()
 	{
 		var rootCell = hoveredGridArea.Position;
-		var hoveredBuildingComponent =
-			gridManager.GetAllBuildingComponents()
+		var allBuildingComponents = gridManager.GetAllBuildingComponents();
+		var hoveredBuildingComponent = allBuildingComponents
 			.FirstOrDefault((buildingComponent) => buildingComponent.IsTileInBuildingArea(rootCell));
 
 		if (hoveredBuildingComponent == null) return;
 
 		if (
 			!hoveredBuildingComponent.buildingResource.isDeletable ||
-			!hoveredBuildingComponent.CanDestroy() ||
+			allBuildingComponents.Any(buildingComponent => buildingComponent.IsPlayingAnimation()) ||
 			!gridManager.CanDestroyBuilding(hoveredBuildingComponent)
 		) return;
 

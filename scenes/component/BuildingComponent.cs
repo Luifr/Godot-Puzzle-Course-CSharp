@@ -55,12 +55,12 @@ public partial class BuildingComponent : Node2D
     return occupiedTiles.Contains(tilePosition);
   }
 
-  public bool CanDestroy()
+  public bool IsPlayingAnimation()
   {
     var buildingAnimatorComponent = Owner.GetFirstNodeOfType<BuildingAnimatorComponent>();
-    if (buildingAnimatorComponent == null) return true;
+    if (buildingAnimatorComponent == null) return false;
 
-    return !buildingAnimatorComponent.IsPlayingAnimation();
+    return buildingAnimatorComponent.IsPlayingAnimation();
   }
 
   public void Destroy()
