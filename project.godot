@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameEvents="*res://scenes/autoload/GameEvents.tscn"
 LevelManager="*uid://cglli7w22r0qk"
+SaveManager="*uid://bgwikjvjag5mb"
 
 [display]
 

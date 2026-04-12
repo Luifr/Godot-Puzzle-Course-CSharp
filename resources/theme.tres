@@ -7,6 +7,20 @@
 [ext_resource type="FontFile" uid="uid://daylmj2dle0qu" path="res://resources/Bitfantasy.ttf" id="3_886mr"]
 [ext_resource type="Texture2D" uid="uid://cufw2cm678v51" path="res://assets/ui/button_red_nine_slides_pressed.png" id="3_aaf3v"]
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_aaf3v"]
+load_path = "res://.godot/imported/button_red_nine_slides.png-067f9cb062843767a7330bd76b8e2308.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yp2uj"]
+texture = SubResource("CompressedTexture2D_aaf3v")
+texture_margin_left = 23.0
+texture_margin_top = 20.0
+texture_margin_right = 23.0
+texture_margin_bottom = 27.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(7, 0, 178, 184)
+modulate_color = Color(0.54901963, 0.54901963, 0.54901963, 1)
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_aaf3v"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aaf3v"]
@@ -75,6 +89,7 @@ Button/colors/font_focus_color = Color(1, 1, 1, 1)
 Button/colors/font_hover_color = Color(1, 1, 1, 1)
 Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
 Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/styles/disabled = SubResource("StyleBoxTexture_yp2uj")
 Button/styles/focus = SubResource("StyleBoxEmpty_aaf3v")
 Button/styles/hover = SubResource("StyleBoxTexture_aaf3v")
 Button/styles/hover_pressed = SubResource("StyleBoxTexture_iojti")

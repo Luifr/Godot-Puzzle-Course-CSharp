@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://60rlvyt5p0gs" path="res://scenes/ui/LevelSelectSection.cs" id="1_ftdwk"]
 [ext_resource type="Texture2D" uid="uid://k5m175nbxqli" path="res://assets/wood_icon.png" id="1_guxwv"]
+[ext_resource type="Texture2D" uid="uid://dbdkbgdnqx6vj" path="res://assets/ui/check.png" id="3_auilg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ftdwk"]
 atlas = ExtResource("1_guxwv")
@@ -22,18 +23,19 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=236982606]
+custom_minimum_size = Vector2(176, 0)
 layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="LevelNumberLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1328024108]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 48
 text = "Level 1"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1304315093]
 layout_mode = 2
-alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=37971787]
 layout_mode = 2
@@ -45,6 +47,13 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "4"
+
+[node name="CompletedIndicator" type="TextureRect" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=238562900]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+texture = ExtResource("3_auilg")
+stretch_mode = 2
 
 [node name="Button" type="Button" parent="MarginContainer/VBoxContainer" unique_id=730117979]
 unique_name_in_owner = true

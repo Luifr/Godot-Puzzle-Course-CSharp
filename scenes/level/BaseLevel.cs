@@ -1,3 +1,4 @@
+using Game.AutoLoad;
 using Game.Manager;
 using Game.Resources.Level;
 using Game.UI;
@@ -43,15 +44,21 @@ public partial class BaseLevel : Node
     gameUI.Show();
   }
 
+  private void ShowLevelComplete()
+  {
+    SaveManager.SaveLevelCompletion(levelDefinitionResource);
+    goldMine.SetActive();
+    var levelCompleteScreenScene = LevelCompleteScreenScene.Instantiate<LevelCompleteScreen>();
+    AddChild(levelCompleteScreenScene);
+    gameUI.HideUI();
+  }
+
   private void OnGridStateUpdated()
   {
     var goldMineTilePosition = gridManager.ConvertWorldPositionToTilePosition(goldMine.GlobalPosition);
     if (gridManager.IsTilePositionInAnyBuildingRadius(goldMineTilePosition))
     {
-      goldMine.SetActive();
-      var levelCompleteScreenScene = LevelCompleteScreenScene.Instantiate<LevelCompleteScreen>();
-      AddChild(levelCompleteScreenScene);
-      gameUI.HideUI();
+      ShowLevelComplete();
     }
   }
 }

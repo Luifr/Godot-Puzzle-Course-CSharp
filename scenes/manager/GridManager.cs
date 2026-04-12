@@ -225,7 +225,7 @@ public partial class GridManager : Node
 			.ToDictionary();
 
 		var nonDangerNonAttackBuildings = allBuildingComponents
-			.Where(buildingComponent => !buildingComponent.buildingResource.IsDangerBuilding && !buildingComponent.buildingResource.IsAttackBuilding)
+			.Where(buildingComponent => !buildingComponent.buildingResource.IsDangerBuilding && !buildingComponent.buildingResource.IsAttackBuilding && !buildingComponent.buildingResource.isBase)
 			.ToList();
 
 		var dangerBuildings = allBuildingComponents
