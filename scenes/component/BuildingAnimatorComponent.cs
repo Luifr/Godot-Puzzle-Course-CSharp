@@ -47,6 +47,7 @@ public partial class BuildingAnimatorComponent : Node2D
 			var impactParticles = impactParticleScene.Instantiate<Node2D>();
 			Owner.GetParent().AddChild(impactParticles);
 			impactParticles.GlobalPosition = GlobalPosition;
+			GameCamera.Shake();
 		}));
 
 		activeTween
@@ -74,6 +75,8 @@ public partial class BuildingAnimatorComponent : Node2D
 		var destroyParticles = destroyParticleScene.Instantiate<Node2D>();
 		Owner.GetParent().AddChild(destroyParticles);
 		destroyParticles.GlobalPosition = GlobalPosition;
+
+		GameCamera.Shake();
 
 		activeTween = CreateTween();
 		activeTween

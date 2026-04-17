@@ -3,6 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://m5e0hg6lexx7" path="res://scenes/component/BuildingComponent.tscn" id="1_julgv"]
 [ext_resource type="PackedScene" uid="uid://ddr1rv7lgo6ce" path="res://scenes/component/BuildingAnimatorComponent.tscn" id="2_srkav"]
 [ext_resource type="PackedScene" uid="uid://cnmky4221t3wi" path="res://scenes/building/sprite/BarracksSprite2d.tscn" id="3_julgv"]
+[ext_resource type="PackedScene" uid="uid://dexyvs0fp5vta" path="res://scenes/effect/BarracksImpactParticles.tscn" id="3_srkav"]
+[ext_resource type="PackedScene" uid="uid://b5vf78o2sjgi5" path="res://scenes/effect/BarracksDestroyParticles.tscn" id="4_dfhwy"]
 
 [node name="Barracks" type="Node2D" unique_id=738640667]
 y_sort_enabled = true
@@ -11,6 +13,8 @@ y_sort_enabled = true
 buildingResourcePath = "uid://cer8x23yvpiyd"
 
 [node name="BuildingAnimatorComponent" parent="." unique_id=1849280934 instance=ExtResource("2_srkav")]
+impactParticleScene = ExtResource("3_srkav")
+destroyParticleScene = ExtResource("4_dfhwy")
 
 [node name="BarracksSprite2D" parent="BuildingAnimatorComponent" unique_id=1980569457 instance=ExtResource("3_julgv")]
-position = Vector2(160, 96)
+offset = Vector2(-160, -250)
