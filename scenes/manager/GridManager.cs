@@ -194,7 +194,7 @@ public partial class GridManager : Node
 		return new Vector2I((int)tilePosition.X, (int)tilePosition.Y);
 	}
 
-	public bool CanDestroyBuilding(BuildingComponent toDestroyBuildingComponent)
+	public bool CanDestroyBuilding(BuildingComponent toDestroyBuildingComponent, int availableResourceCount)
 	{
 		if (toDestroyBuildingComponent.buildingResource.buildableRadius > 0)
 		{
@@ -206,8 +206,36 @@ public partial class GridManager : Node
 		{
 			return CanDestroyAttackBuilding(toDestroyBuildingComponent);
 		}
+		else if (toDestroyBuildingComponent.buildingResource.IsResourceBuilding)
+		{
+			var resourceTilesInRadius = GetResourceTilesInRadius(
+				toDestroyBuildingComponent.GetTileArea(),
+				toDestroyBuildingComponent.buildingResource.resourceRadius
+			);
+
+			var allRemainingResourceTiles = GetAllBuildingComponents()
+				.Where(building => building != toDestroyBuildingComponent && building.buildingResource.IsResourceBuilding)
+				.Aggregate(new HashSet<Vector2I>(), (hash, building) =>
+				{
+					hash.UnionWith(GetResourceTilesInRadius(
+					building.GetTileArea(),
+					building.buildingResource.resourceRadius
+				));
+
+					return hash;
+				});
+
+			var uniqueResourcesInRadius = resourceTilesInRadius.Except(allRemainingResourceTiles).ToList();
+
+			return availableResourceCount - uniqueResourcesInRadius.Count >= 0;
+		}
 
 		return true;
+	}
+
+	public HashSet<Vector2I> GetCollectedResourceTiles()
+	{
+		return collectedresourceTiles.ToHashSet();
 	}
 
 	private bool CanDestroyAttackBuilding(BuildingComponent toDestroyBuildingComponent)

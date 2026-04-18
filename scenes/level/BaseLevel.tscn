@@ -8,9 +8,11 @@
 [ext_resource type="TileSet" uid="uid://chjien2bry4v2" path="res://resources/tiles.tres" id="3_0bbpv"]
 [ext_resource type="PackedScene" uid="uid://bgu11wxwr5v31" path="res://scenes/building/Base.tscn" id="5_vcsgt"]
 [ext_resource type="PackedScene" uid="uid://2237bx54pisu" path="res://scenes/ui/GameUi.tscn" id="6_c01mt"]
+[ext_resource type="PackedScene" uid="uid://ddqtqo47lrbvm" path="res://scenes/manager/ResourceIndicatorManager.tscn" id="6_uuy1i"]
 [ext_resource type="PackedScene" uid="uid://epkt8ihuqwtr" path="res://scenes/building/BuildingGhost.tscn" id="7_jlsqs"]
 [ext_resource type="PackedScene" uid="uid://cyfunv42pexgx" path="res://scenes/GoldMine.tscn" id="7_q8u5g"]
 [ext_resource type="PackedScene" uid="uid://d0ojrjo8iq3fu" path="res://scenes/GameCamera.tscn" id="10_fjnsi"]
+[ext_resource type="PackedScene" uid="uid://bmywenjp5c1ih" path="res://scenes/manager/FloatingTextManager.tscn" id="13_8dj5a"]
 
 [node name="BaseLevel" type="Node" unique_id=2118511925]
 script = ExtResource("1_o5qli")
@@ -55,3 +57,8 @@ unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.7058824)
 y_sort_enabled = true
 tile_set = ExtResource("2_rvslj")
+
+[node name="ResourceManager" parent="." unique_id=719437220 node_paths=PackedStringArray("gridManager") instance=ExtResource("6_uuy1i")]
+gridManager = NodePath("../GridManager")
+
+[node name="FloatingTextManager" parent="." unique_id=883644199 instance=ExtResource("13_8dj5a")]

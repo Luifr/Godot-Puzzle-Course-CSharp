@@ -10,6 +10,8 @@ namespace Game.Component;
 
 public partial class BuildingComponent : Node2D
 {
+  [Signal] public delegate void EnabledEventHandler();
+  [Signal] public delegate void DisabledEventHandler();
 
   [Export(PropertyHint.File, "*.tres")]
   private string buildingResourcePath;
@@ -82,6 +84,7 @@ public partial class BuildingComponent : Node2D
     if (!isDisabled) return;
 
     isDisabled = false;
+    EmitSignalEnabled();
     GameEvents.EmitBuildingEnabled(this);
   }
 
@@ -90,6 +93,7 @@ public partial class BuildingComponent : Node2D
     if (isDisabled) return;
 
     isDisabled = true;
+    EmitSignalDisabled();
     GameEvents.EmitBuildingDisabled(this);
   }
 

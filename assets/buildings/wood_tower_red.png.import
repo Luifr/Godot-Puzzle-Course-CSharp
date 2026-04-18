@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://n373njjs8k1m"
-path="res://.godot/imported/Wood_Tower_Red.png-ed00eb0858e1b9fe8bd45ce955d2abb4.ctex"
+uid="uid://dsar51yji5dt7"
+path="res://.godot/imported/wood_tower_red.png-504db77dfc1bed56526bae997636c5a3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/buildings/Wood_Tower_Red.png"
-dest_files=["res://.godot/imported/Wood_Tower_Red.png-ed00eb0858e1b9fe8bd45ce955d2abb4.ctex"]
+source_file="res://assets/buildings/wood_tower_red.png"
+dest_files=["res://.godot/imported/wood_tower_red.png-504db77dfc1bed56526bae997636c5a3.ctex"]
 
 [params]
 

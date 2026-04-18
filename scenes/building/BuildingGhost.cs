@@ -1,3 +1,4 @@
+using Game.Manager;
 using Godot;
 
 namespace Game.Building;
@@ -49,9 +50,9 @@ public partial class BuildingGhost : Node2D
 
   public void SetDimensions(Vector2I dimensions)
   {
-    bottomLeft.Position = dimensions * new Vector2I(0, 64);
-    topRight.Position = dimensions * new Vector2I(64, 0);
-    bottomRight.Position = dimensions * new Vector2I(64, 64);
+    bottomLeft.Position = dimensions * new Vector2I(0, GridManager.TILE_SIZE);
+    topRight.Position = dimensions * new Vector2I(GridManager.TILE_SIZE, 0);
+    bottomRight.Position = dimensions * new Vector2I(GridManager.TILE_SIZE, GridManager.TILE_SIZE);
   }
 
   public void SetBuildingGhostGlobalPosition(Vector2 globalPosition)
