@@ -20,6 +20,7 @@ public partial class MainMenu : Node
 		optionsButton = GetNode<Button>("%OptionsButton");
 		quitButton = GetNode<Button>("%QuitButton");
 
+		OptionsHelper.SetBusVolumePercent("Music", 0.5f);
 		AudioHelpers.RegisterButtons([playButton, optionsButton, quitButton]);
 
 		levelSelectScreen.Visible = false;

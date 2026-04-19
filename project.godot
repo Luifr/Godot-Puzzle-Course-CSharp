@@ -36,6 +36,7 @@ window/size/window_width_override=1920
 window/size/window_height_override=1080
 window/stretch/scale=1.4
 mouse_cursor/custom_image="uid://brw2niwd1u8yh"
+window/size/mode.release=4
 
 [dotnet]
 
