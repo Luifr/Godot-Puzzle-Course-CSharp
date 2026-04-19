@@ -6,26 +6,26 @@ namespace Game.AutoLoad;
 
 public partial class LevelManager : Node
 {
-	public static LevelManager Instance { get; private set; }
+	private static LevelManager instance;
 
 	[Export]
 	private LevelDefinitionResource[] levelDefinitions;
 
-	private int currentLevelIndex;
+	private static int currentLevelIndex;
 
 	public override void _EnterTree()
 	{
-		Instance = this;
+		instance = this;
 	}
 
 	public static LevelDefinitionResource[] GetLevelDefinitions()
 	{
-		return Instance.levelDefinitions.ToArray();
+		return instance.levelDefinitions.ToArray();
 	}
 
-	public void ChangeToLevel(int levelIndex)
+	public static void ChangeToLevel(int levelIndex)
 	{
-		if (levelIndex >= levelDefinitions.Length || levelIndex < 0)
+		if (levelIndex >= instance.levelDefinitions.Length || levelIndex < 0)
 		{
 			GD.PushError("LevelManager:ChangeToLevel Invalid level index. LevelIndex is " + levelIndex.ToString());
 			return;
@@ -33,13 +33,18 @@ public partial class LevelManager : Node
 
 		currentLevelIndex = levelIndex;
 
-		var levelDefinition = levelDefinitions[currentLevelIndex];
+		var levelDefinition = instance.levelDefinitions[currentLevelIndex];
 
-		GetTree().ChangeSceneToFile(levelDefinition.LevelScenePath);
+		instance.GetTree().ChangeSceneToFile(levelDefinition.LevelScenePath);
 	}
 
-	public void ChangeToNextLevel()
+	public static void ChangeToNextLevel()
 	{
 		ChangeToLevel(currentLevelIndex + 1);
+	}
+
+	public static bool IsLastLevel()
+	{
+		return currentLevelIndex == instance.levelDefinitions.Length - 1;
 	}
 }

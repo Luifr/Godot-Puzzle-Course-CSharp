@@ -65,7 +65,7 @@ public partial class LevelSelectScreen : MarginContainer
 
 	private void OnLevelSelected(int index)
 	{
-		LevelManager.Instance.ChangeToLevel(index);
+		LevelManager.ChangeToLevel(index);
 	}
 
 	private void UpdateButtonVisibility()
