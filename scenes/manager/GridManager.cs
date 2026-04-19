@@ -28,6 +28,8 @@ public partial class GridManager : Node
 	private HashSet<Vector2I> attackTiles = new();
 	private HashSet<Vector2I> allTilesInBuildingRadius = new();
 	private HashSet<Vector2I> collectedresourceTiles = new();
+
+	private Vector2I goldMinePosition;
 	#endregion
 
 	#region Constants
@@ -61,6 +63,11 @@ public partial class GridManager : Node
 		GameEvents.Instance.BuildingDestroyed -= OnBuildingDestroyed;
 		GameEvents.Instance.BuildingEnabled += OnBuildingEnabled;
 		GameEvents.Instance.BuildingDisabled += OnBuildingDisabled;
+	}
+
+	public void SetGoldMinePosition(Vector2I position)
+	{
+		goldMinePosition = position;
 	}
 
 	public (TileMapLayer, bool) GetTileCustomData(Vector2I tilePosition, string dataName)
@@ -563,7 +570,7 @@ public partial class GridManager : Node
 		return GetTilesInRadius(
 			tileArea,
 			radius,
-			(tilePosition) => GetTileCustomData(tilePosition, IS_BUILDABLE).Item2
+			(tilePosition) => GetTileCustomData(tilePosition, IS_BUILDABLE).Item2 || tilePosition == goldMinePosition
 		);
 	}
 

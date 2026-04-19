@@ -8,7 +8,8 @@ namespace Game;
 
 public partial class BaseLevel : Node
 {
-
+  [Export]
+  private PackedScene EscapeMenuScene;
   [Export]
   private PackedScene LevelCompleteScreenScene;
   [Export]
@@ -40,8 +41,20 @@ public partial class BaseLevel : Node
     gameCamera.SetBoundingRect(baseTerrainTileMapLayer.GetUsedRect());
     gameCamera.CenterOnPosition(baseBuilding.GlobalPosition);
 
+    gridManager.SetGoldMinePosition(gridManager.ConvertWorldPositionToTilePosition(goldMine.GlobalPosition));
+
     gridManager.GridStateUpdated += OnGridStateUpdated;
     gameUI.Show();
+  }
+
+  public override void _UnhandledInput(InputEvent @event)
+  {
+    if (@event.IsActionPressed("escape"))
+    {
+      var escapeMenu = EscapeMenuScene.Instantiate<EscapeMenu>();
+      AddChild(escapeMenu);
+      GetViewport().SetInputAsHandled();
+    }
   }
 
   private void ShowLevelComplete()

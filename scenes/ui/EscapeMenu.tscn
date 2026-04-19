@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://buntu2vvuscsu"]
+
+[ext_resource type="Script" uid="uid://lk1r0ggsgfcj" path="res://scenes/ui/EscapeMenu.cs" id="1_yok0m"]
+[ext_resource type="PackedScene" uid="uid://bcydajlt3mro" path="res://scenes/ui/OptionsMenu.tscn" id="2_n2r58"]
+
+[node name="Escape Menu" type="CanvasLayer" unique_id=2112175674]
+layer = 2
+script = ExtResource("1_yok0m")
+mainMenuScenePath = "uid://dpp1gj6r3guca"
+optionsMenuScene = ExtResource("2_n2r58")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=16081489]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.49019608)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1983113896]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=1248307239]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer" unique_id=2134947057]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer" unique_id=1938288747]
+layout_mode = 2
+
+[node name="ResumeButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2023636950]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Resume"
+
+[node name="OptionsButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2093089834]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Options"
+
+[node name="QuitToMenuButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2003085848]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Quit to menu"

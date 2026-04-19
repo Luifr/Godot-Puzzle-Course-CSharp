@@ -1,3 +1,4 @@
+using Game.AutoLoad;
 using Game.Resources.Building;
 using Godot;
 
@@ -19,6 +20,8 @@ public partial class BuildingSection : PanelContainer
 		descriptionsLabel = GetNode<Label>("%DescriptionLabel");
 		costLabel = GetNode<Label>("%CostLabel");
 		selectButton = GetNode<Button>("%Button");
+
+		AudioHelpers.RegisterButtons([selectButton]);
 
 		selectButton.Pressed += EmitSignalSelectButtonPressed;
 	}

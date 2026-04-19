@@ -10,11 +10,14 @@ public partial class ResourceIndicatorManager : Node
 	[Export] GridManager gridManager;
 	[Export] PackedScene resourceIndicatorScene;
 
+	private AudioStreamPlayer audioStreamPlayer;
 	private HashSet<Vector2I> indicatedTiles = new();
 	private Dictionary<Vector2I, ResourceIndicator> resourceIndicatorsHash = new();
 
 	public override void _Ready()
 	{
+		audioStreamPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
+
 		gridManager.ResourceTilesUpdated += OnResourceTilesUpdate;
 	}
 
@@ -46,6 +49,8 @@ public partial class ResourceIndicatorManager : Node
 			var newlyIndicatedTiles = currentResourceTiles.Except(indicatedTiles).ToList();
 			var toRemoveTiles = indicatedTiles.Except(currentResourceTiles).ToList();
 			indicatedTiles = currentResourceTiles;
+
+			if (newlyIndicatedTiles.Count > 0) audioStreamPlayer.Play();
 
 			UpdateIndicators(newlyIndicatedTiles, toRemoveTiles);
 		}).CallDeferred();
